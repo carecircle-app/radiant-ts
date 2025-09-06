@@ -4,8 +4,6 @@
 dist/
 coverage/
 *.log
-
-# local env & db (never commit)
 .env
 .env.*
 !.env.example

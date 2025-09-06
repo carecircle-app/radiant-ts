@@ -1,0 +1,42 @@
+{
+  "price_1S3rKr07Y1VOtQQTZMThhwXN": {
+    "id": "price_1S3rKr07Y1VOtQQTZMThhwXN",
+    "product": "prod_Szr2xSDmB30qxQ",
+    "active": true,
+    "unit_amount": 1500,
+    "currency": "usd",
+    "interval": "month",
+    "nickname": null,
+    "updated_at": 1757046798531
+  },
+  "price_1S3rYE07Y1VOtQQTAa6teGTb": {
+    "id": "price_1S3rYE07Y1VOtQQTAa6teGTb",
+    "product": "prod_SzrGYurlZZ4oAv",
+    "active": true,
+    "unit_amount": 1500,
+    "currency": "usd",
+    "interval": "month",
+    "nickname": null,
+    "updated_at": 1757047626868
+  },
+  "price_1S3tB007Y1VOtQQTulxYCGmY": {
+    "id": "price_1S3tB007Y1VOtQQTulxYCGmY",
+    "product": "prod_Szsw7n02TqIHHH",
+    "active": true,
+    "unit_amount": 1500,
+    "currency": "usd",
+    "interval": null,
+    "nickname": null,
+    "updated_at": 1757053875994
+  },
+  "price_1S3tBG07Y1VOtQQTmfo7sp5V": {
+    "id": "price_1S3tBG07Y1VOtQQTmfo7sp5V",
+    "product": "prod_SzsxNgGzt5WVxS",
+    "active": true,
+    "unit_amount": 1500,
+    "currency": "usd",
+    "interval": null,
+    "nickname": null,
+    "updated_at": 1757053890899
+  }
+}

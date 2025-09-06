@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/* ---------- Billing core ---------- */
+
+model Customer {
+  id        String   @id
+  email     String?
+  name      String?
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscriptions Subscription[]
+  invoices      Invoice[]
+  payments      Payment[]
+}
+
+
+model Subscription {
+  id                 String   @id
+  status             String
+  customer           Customer @relation(fields: [customerId], references: [id])
+  customerId         String
+  priceId            String?
+  planAmount         Int?
+  currency           String?
+  currentPeriodStart Int?
+  currentPeriodEnd   Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  invoices Invoice[]
+}
+
+model Invoice {
+  id             String        @id
+  subscriptionId String?
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  amountPaid     Int?
+  amountDue      Int?
+  currency       String?
+  status         String?
+  hostedUrl      String?
+  customerId     String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  Customer       Customer?     @relation(fields: [customerId], references: [id])
+}
+
+model Payment {
+  id         String    @id
+  amount     Int
+  currency   String
+  status     String
+  customerId String?
+  email      String?
+  createdAt  DateTime
+  updatedAt  DateTime  @updatedAt
+  Customer   Customer? @relation(fields: [customerId], references: [id])
+}
+
+model Event {
+  id        String   @id
+  type      String
+  payload   Json
+  createdAt DateTime @default(now())
+}
+
+/* ---------- App extras you already had ---------- */
+
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  tier      String   @default("FREE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SosEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  payload   Json
+  createdAt DateTime @default(now())
+}
+
+model SecureVaultItem {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String
+  data      Json
+  createdAt DateTime @default(now())
+}
+
+model ParkingSpot {
+  id        String   @id @default(cuid())
+  userId    String
+  lat       Float
+  lng       Float
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+model Receipt {
+  id        String   @id @default(cuid())
+  userId    String
+  total     Int
+  currency  String
+  meta      Json
+  createdAt DateTime @default(now())
+}
+
+model PackageTrack {
+  id        String   @id @default(cuid())
+  userId    String
+  carrier   String
+  tracking  String
+  status    String
+  createdAt DateTime @default(now())
+}

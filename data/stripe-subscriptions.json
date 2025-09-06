@@ -1,0 +1,32 @@
+{
+  "sub_1S3rmT07Y1VOtQQT40eJolL4": {
+    "id": "sub_1S3rmT07Y1VOtQQT40eJolL4",
+    "status": "active",
+    "customer": "cus_SzrVNmR0jju93T",
+    "price_id": "price_1S3jjE07Y1VOtQQTGbpD36z4",
+    "plan_amount": 499,
+    "currency": "usd",
+    "mode": "subscription",
+    "updated_at": 1757048512236
+  },
+  "sub_1S3rml07Y1VOtQQTC0BLg0aA": {
+    "id": "sub_1S3rml07Y1VOtQQTC0BLg0aA",
+    "status": "active",
+    "customer": "cus_SzrVucAvApsGjY",
+    "price_id": "price_1S3laJ07Y1VOtQQTbQkTXlK6",
+    "plan_amount": 999,
+    "currency": "usd",
+    "mode": "subscription",
+    "updated_at": 1757048529662
+  },
+  "sub_1S4BSs07Y1VOtQQTWKWYl3qY": {
+    "id": "sub_1S4BSs07Y1VOtQQTWKWYl3qY",
+    "status": "active",
+    "customer": "cus_T0BqlPLxiMaiUx",
+    "price_id": "price_1S2FwU07Y1VOtQQTOzcazKUp",
+    "plan_amount": 150,
+    "currency": "usd",
+    "mode": "subscription",
+    "updated_at": 1757124176680
+  }
+}

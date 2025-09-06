@@ -1,0 +1,98 @@
+{
+  "in_1S3rDv07Y1VOtQQTtClfOn5F": {
+    "id": "in_1S3rDv07Y1VOtQQTtClfOn5F",
+    "subscription": null,
+    "amount_paid": 2000,
+    "amount_due": 2000,
+    "currency": "usd",
+    "status": "paid",
+    "customer": "cus_SzqvGxGFUvSG1K",
+    "created": 1757046367,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9TenF2TThEaDd4RVdmQ1JUUTJBRk10Y3ViRkNoVWluLDE0NzU4NzE3MA0200vPHgxqPu?s=ap",
+    "updated_at": 1757046370896
+  },
+  "in_1S3rKv07Y1VOtQQTnaFe70Z3": {
+    "id": "in_1S3rKv07Y1VOtQQTnaFe70Z3",
+    "subscription": null,
+    "amount_paid": 2000,
+    "amount_due": 2000,
+    "currency": "usd",
+    "status": "paid",
+    "customer": "cus_Szr3IZj3eRDTXe",
+    "created": 1757046801,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9TenIzVlIycVBuUzl3YkJsU2F0OTVST09Pc1ZJN2dFLDE0NzU4NzYwNA0200M7ptlYb1?s=ap",
+    "updated_at": 1757046806326
+  },
+  "in_1S3rYI07Y1VOtQQTwWbdCs3q": {
+    "id": "in_1S3rYI07Y1VOtQQTwWbdCs3q",
+    "subscription": null,
+    "amount_paid": 2000,
+    "amount_due": 2000,
+    "currency": "usd",
+    "status": "paid",
+    "customer": "cus_SzrGQnOjlbhH8I",
+    "created": 1757047630,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9TenJHMkhBNnk0UlFtSk5RWnVreWhzM295WE5INjhFLDE0NzU4ODQzMw0200XQwB3Nv1?s=ap",
+    "updated_at": 1757047633921
+  },
+  "in_1S3reS07Y1VOtQQThSx37pKu": {
+    "id": "in_1S3reS07Y1VOtQQThSx37pKu",
+    "subscription": null,
+    "amount_paid": 2000,
+    "amount_due": 2000,
+    "currency": "usd",
+    "status": "paid",
+    "customer": "cus_SzrNWL7xxv8Cqa",
+    "created": 1757048012,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9TenJOa2RJekd2dllXa3NWak1ZRXhITUNrcHl5TXdTLDE0NzU4ODgxNQ0200VCamF2ie?s=ap",
+    "updated_at": 1757048015778
+  },
+  "in_1S3reW07Y1VOtQQTCw7jRIub": {
+    "id": "in_1S3reW07Y1VOtQQTCw7jRIub",
+    "subscription": null,
+    "amount_paid": 0,
+    "amount_due": 2000,
+    "currency": "usd",
+    "status": "open",
+    "customer": "cus_SzrNYMYCtxY5h0",
+    "created": 1757048016,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9TenJObldraTlwbDI0TFNpbURrcTM2MTFQbHR3cHdxLDE0NzU4ODgxNw02004oxmmoD1?s=ap",
+    "updated_at": 1757048018038
+  },
+  "in_1S3rmR07Y1VOtQQT4Tpc0dyx": {
+    "id": "in_1S3rmR07Y1VOtQQT4Tpc0dyx",
+    "subscription": null,
+    "amount_paid": 499,
+    "amount_due": 499,
+    "currency": "usd",
+    "status": "paid",
+    "customer": "cus_SzrVNmR0jju93T",
+    "created": 1757048507,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9TenJWdk5aazVGVmwyV0RxYm4xcHZWd1h0VkFwdEt0LDE0NzU4OTMxMA0200MJGvrHxq?s=ap",
+    "updated_at": 1757048511996
+  },
+  "in_1S3rmj07Y1VOtQQTJqEGZf6p": {
+    "id": "in_1S3rmj07Y1VOtQQTJqEGZf6p",
+    "subscription": null,
+    "amount_paid": 999,
+    "amount_due": 999,
+    "currency": "usd",
+    "status": "paid",
+    "customer": "cus_SzrVucAvApsGjY",
+    "created": 1757048525,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9TenJWemE3WUFaNXhIS3RQNHJUWUpjWm84UjFFZzM2LDE0NzU4OTMyOQ0200dwiFj6YH?s=ap",
+    "updated_at": 1757048529808
+  },
+  "in_1S4BSo07Y1VOtQQTlU52h7Lz": {
+    "id": "in_1S4BSo07Y1VOtQQTlU52h7Lz",
+    "subscription": null,
+    "amount_paid": 150,
+    "amount_due": 150,
+    "currency": "usd",
+    "status": "paid",
+    "customer": "cus_T0BqlPLxiMaiUx",
+    "created": 1757124169,
+    "hosted_invoice_url": "https://invoice.stripe.com/i/acct_1S2Fgj07Y1VOtQQT/test_YWNjdF8xUzJGZ2owN1kxVk90UVFULF9UMEJxYzVCZUxvRFF0RmpkRWJoMzhnQzhwRFdsaFdkLDE0NzY2NDk3NQ0200fVbfo7fC?s=ap",
+    "updated_at": 1757124176038
+  }
+}

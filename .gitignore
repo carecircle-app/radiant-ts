@@ -1,0 +1,12 @@
+﻿node_modules/
+.next/
+.turbo/
+dist/
+coverage/
+*.log
+
+# local env & db (never commit)
+.env
+.env.*
+!.env.example
+prisma/dev.db

@@ -1,0 +1,32 @@
+{
+  "prod_Szr2NVaxcmizhd": {
+    "id": "prod_Szr2NVaxcmizhd",
+    "name": "myproduct",
+    "active": true,
+    "updated_at": 1757046799144
+  },
+  "prod_SzrGYurlZZ4oAv": {
+    "id": "prod_SzrGYurlZZ4oAv",
+    "name": "myproduct",
+    "active": true,
+    "updated_at": 1757047626584
+  },
+  "prod_SzrGtAeRMFGQdU": {
+    "id": "prod_SzrGtAeRMFGQdU",
+    "name": "myproduct",
+    "active": true,
+    "updated_at": 1757047627529
+  },
+  "prod_Szsw7n02TqIHHH": {
+    "id": "prod_Szsw7n02TqIHHH",
+    "name": "myproduct",
+    "active": true,
+    "updated_at": 1757053875994
+  },
+  "prod_SzsxNgGzt5WVxS": {
+    "id": "prod_SzsxNgGzt5WVxS",
+    "name": "myproduct",
+    "active": true,
+    "updated_at": 1757053890519
+  }
+}

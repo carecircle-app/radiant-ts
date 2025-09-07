@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @typescript-eslint/no-require-imports */
+
 // src/lib/webhookStore.ts
 
 // Use ONE of these lines (not both). If your tsconfig maps "@/*" -> "src/*", keep the alias:

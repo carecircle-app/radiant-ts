@@ -1,23 +1,31 @@
 // src/lib/stripe.ts
+import "server-only";
+import Stripe from "stripe";
 
 /**
- * Frontend should NEVER use STRIPE_SECRET_KEY.
- * Only expose public price IDs and safe helpers.
- * Private Stripe client lives only in backend/server.ts
+ * Server-only Stripe singleton.
+ * Avoids hard-coding apiVersion so it stays compatible with the SDK types
+ * and uses the version tied to your secret key in Stripe.
  */
 
-// Map of price IDs (public, safe for frontend)
-export const PRICES = {
-  LITE_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE ?? "",
-  ELITE_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE ?? "",
-  DONATION_ONE_TIME: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATION_ONE_TIME ?? "",
-};
+let _stripe: Stripe | null = null;
 
-// Optionally, validate they exist in dev mode
-if (process.env.NODE_ENV !== "production") {
-  for (const [plan, id] of Object.entries(PRICES)) {
-    if (!id) {
-      console.warn(`[stripe] Missing env var for ${plan}`);
-    }
+function requireSecret(): string {
+  const key = (process.env.STRIPE_SECRET_KEY || "").trim();
+  if (!key || !key.startsWith("sk_")) {
+    throw new Error("STRIPE_SECRET_KEY is missing/invalid in environment.");
   }
+  return key;
 }
+
+export function getStripe(): Stripe {
+  if (_stripe) return _stripe;
+  _stripe = new Stripe(requireSecret());
+  return _stripe;
+}
+
+/** Convenience export for places that do `import { stripe } from '@/lib/stripe'` */
+export const stripe = getStripe();
+
+/** Optional: quick feature flag for guards */
+export const hasStripe = !!(process.env.STRIPE_SECRET_KEY || "").trim();

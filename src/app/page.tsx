@@ -11,6 +11,7 @@ import {
   CpuChipIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
+import type { SVGProps, ComponentType } from "react"; // ✅ TS fix
 
 export const metadata = {
   title: "CareCircle — Coordinate care with confidence",
@@ -18,7 +19,8 @@ export const metadata = {
     "Shared calendars, medication reminders, geofencing alerts, secure chat, and visit notes — all in one app for families and caregivers.",
 };
 
-type IconT = (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+// ✅ use React types (avoids 'Cannot find namespace JSX')
+type IconT = ComponentType<SVGProps<SVGSVGElement>>;
 
 /* ---------- Presentational cards ---------- */
 function FeatureCard({ title, body, Icon }: { title: string; body: string; Icon: IconT }) {

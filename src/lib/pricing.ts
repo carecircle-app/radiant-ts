@@ -1,42 +1,12 @@
-// src/lib/pricing.ts
-export type PriceKey = "LITE_MONTHLY" | "ELITE_MONTHLY" | "DONATION_ONE_TIME";
-
-export type KnownPrice = {
-  key: PriceKey;
-  label: string;
-  envVar: string;
-  id?: string;
+﻿export const SUPPORTED_CURRENCIES = ["usd"] as const;
+export type Currency = (typeof SUPPORTED_CURRENCIES)[number];
+export type PlanKey = "lite" | "elite" | "donation" | "donationMonthly";
+const PRICE_ENV: Record<PlanKey, string | undefined> = {
+  lite: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE_MONTHLY,
+  elite: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE_MONTHLY,
+  donation: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATION_ONE_TIME,
+  donationMonthly: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATION,
 };
-
-export const PRICES: KnownPrice[] = [
-  {
-    key: "LITE_MONTHLY",
-    label: "Lite — Monthly",
-    envVar: "STRIPE_PRICE_LITE_MONTHLY",
-    id: process.env.STRIPE_PRICE_LITE_MONTHLY || undefined,
-  },
-  {
-    key: "ELITE_MONTHLY",
-    label: "Elite — Monthly",
-    envVar: "STRIPE_PRICE_ELITE_MONTHLY",
-    id: process.env.STRIPE_PRICE_ELITE_MONTHLY || undefined,
-  },
-  {
-    key: "DONATION_ONE_TIME",
-    label: "Donation — One-Time",
-    envVar: "STRIPE_PRICE_DONATION_ONE_TIME",
-    id: process.env.STRIPE_PRICE_DONATION_ONE_TIME || undefined,
-  },
-];
-
-// Optional: if you later add monthly donations, just add a new entry here:
-// {
-//   key: "DONATION_MONTHLY",
-//   label: "Donation — Monthly",
-//   envVar: "STRIPE_PRICE_DONATION",
-//   id: process.env.STRIPE_PRICE_DONATION || undefined,
-// }
-
-export function getConfiguredPrices() {
-  return PRICES.map(p => ({ ...p }));
+export function getPriceId(plan: PlanKey): string {
+  return PRICE_ENV[plan] ?? "";
 }

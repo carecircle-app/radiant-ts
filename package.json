@@ -1,21 +1,14 @@
-﻿{
+{
   "name": "radiant-ts",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "node scripts/vercel-precheck.js",
+    "prebuild": "node vercel-precheck.js",
     "build": "next build",
-    "dev": "npm run dev:local",
+    "dev": "next dev -H 127.0.0.1 -p 3000",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
-    "typegen": "sanity schema extract --path=src/sanity/extract.json && sanity typegen generate && rm ./src/sanity/extract.json",
-    "dev:web": "next dev -p 3000",
-    "dev:server": "tsx backend/server.ts",
-    "dev:all": "concurrently -k -n WEB,API \"npm:dev:web\" \"npm:dev:server\"",
-    "dev:3001": "next dev -p 3001",
-    "dev:local": "next dev -H 127.0.0.1 -p 3000",
-    "backup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\backup.ps1"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.6",
@@ -59,7 +52,5 @@
     "tsx": "^4.20.5",
     "typescript": "^5"
   },
-  "prisma": {
-    "schema": "prisma/schema.prisma"
-  }
+  "prisma": { "schema": "prisma/schema.prisma" }
 }

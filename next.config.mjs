@@ -1,10 +1,11 @@
-﻿/** @type {import("next").NextConfig} */
-const nextConfig = {
-  // Dont fail Vercel builds on ESLint findings.
-  eslint: { ignoreDuringBuilds: true },
+﻿export default [
+  // …your existing config
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+];
 
-  // If you later hit TypeScript-only build errors, temporarily add:
-  // typescript: { ignoreBuildErrors: true },
-};
 
-export default nextConfig;
+

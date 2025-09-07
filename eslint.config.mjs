@@ -1,22 +1,19 @@
-import { FlatCompat } from '@eslint/eslintrc'
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
+// eslint.config.mjs
+// Flat-config for ESLint 9 + Next.js
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import next from 'eslint-config-next';
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
+/** @type {import('eslint').Linter.FlatConfig[]} */
+export default [
+  // Next.js recommended config
+  ...next,
 
-const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  // Add ignores here (no second export!)
   {
-    rules: {
-      '@next/next/no-img-element': 'off',
-      'prefer-const': 'off',
-    },
+    ignores: [
+      'src/lib/mailer.ts',
+      'src/lib/slack.ts',
+      'src/lib/webhookStore.ts',
+    ],
   },
-]
-
-export default eslintConfig
+];

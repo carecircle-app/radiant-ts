@@ -1,9 +1,9 @@
-/** @type {import("next").NextConfig} */
+﻿/** @type {import("next").NextConfig} */
 const nextConfig = {
-  // Prevent ESLint findings from failing Vercel builds
+  // Dont fail Vercel builds on ESLint findings.
   eslint: { ignoreDuringBuilds: true },
 
-  // If a later build fails on TS types, temporarily uncomment:
+  // If you later hit TypeScript-only build errors, temporarily add:
   // typescript: { ignoreBuildErrors: true },
 };
 

@@ -1,20 +1,6 @@
-export const apiVersion =
-  process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2025-07-10'
+// src/sanity/env.ts
+const rawProjectId = (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '').trim();
+export const projectId = /^[a-z0-9-]+$/.test(rawProjectId) ? rawProjectId : '';
 
-export const dataset = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_DATASET,
-  'Missing environment variable: NEXT_PUBLIC_SANITY_DATASET',
-)
-
-export const projectId = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  'Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID',
-)
-
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-  if (v === undefined) {
-    throw new Error(errorMessage)
-  }
-
-  return v
-}
+export const dataset = (process.env.NEXT_PUBLIC_SANITY_DATASET || 'production').trim();
+export const apiVersion = '2024-01-01'; // keep/adjust to your preferred version

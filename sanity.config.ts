@@ -1,10 +1,9 @@
-'use client'
-
-import { visionTool } from '@sanity/vision'
-import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
-import { apiVersion, dataset, projectId } from './src/sanity/env'
-import { schema } from './src/sanity/schema'
+// sanity.config.ts
+import { defineConfig } from 'sanity';
+import { structureTool } from 'sanity/structure';
+import { visionTool } from '@sanity/vision';
+import { apiVersion, dataset, projectId } from './src/sanity/env';
+import { schema } from './src/sanity/schema';
 
 export default defineConfig({
   name: 'Radiant',
@@ -13,4 +12,4 @@ export default defineConfig({
   dataset,
   schema,
   plugins: [structureTool(), visionTool({ defaultApiVersion: apiVersion })],
-})
+});

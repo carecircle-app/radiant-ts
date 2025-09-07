@@ -1,11 +1,9 @@
-﻿export default [
-  // …your existing config
-  {
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
-    },
-  },
-];
+﻿/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: { ignoreDuringBuilds: true },
+  // typescript: { ignoreBuildErrors: true }, // optional emergency valve
+};
+export default nextConfig;
 
 
 

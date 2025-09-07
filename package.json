@@ -1,10 +1,10 @@
-{
+﻿{
   "name": "radiant-ts",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run dev:local",
+    "build": "NEXTJS_IGNORE_ESLINT=1 next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
@@ -12,7 +12,9 @@
     "dev:web": "next dev -p 3000",
     "dev:server": "tsx backend/server.ts",
     "dev:all": "concurrently -k -n WEB,API \"npm:dev:web\" \"npm:dev:server\"",
-    "dev:3001": "next dev -p 3001"
+    "dev:3001": "next dev -p 3001",
+    "dev:local": "next dev -H 127.0.0.1 -p 3000",
+    "backup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\\\backup.ps1"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.6",
@@ -56,5 +58,7 @@
     "tsx": "^4.20.5",
     "typescript": "^5"
   },
-  "prisma": { "schema": "prisma/schema.prisma" }
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  }
 }

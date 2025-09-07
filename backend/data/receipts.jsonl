@@ -1,0 +1,4 @@
+{"ts_iso":"2025-09-03T03:45:55.519Z","ts":1756871155519,"type":"charge.succeeded"}
+{"ts_iso":"2025-09-03T03:45:55.579Z","ts":1756871155579,"type":"payment_intent.succeeded","amount":2000,"currency":"usd","email":null,"metadata":{},"description":"(created by Stripe CLI)","status":"succeeded"}
+{"ts_iso":"2025-09-03T03:45:55.644Z","ts":1756871155644,"type":"payment_intent.created"}
+{"ts_iso":"2025-09-03T03:45:57.878Z","ts":1756871157878,"type":"charge.updated"}

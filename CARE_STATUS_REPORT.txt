@@ -1,0 +1,111 @@
+CareCircle Project Status Report
+Generated: 2025-09-06 15:58:56
+Root: C:\Users\doitr\OneDrive\Desktop\radiant-ts
+
+
+# Git
+-----
+Branch: feat/landing-polish
+Remote(s):
+origin	https://github.com/carecircle-app/radiant-ts.git (fetch)
+origin	https://github.com/carecircle-app/radiant-ts.git (push)
+
+Recent commits:
+d41045a fix(ts): use React types for icons; landing stays identical
+fb3d7bb chore: add gitignore and env template
+ce39592 feat: new landing (gradient + long layout), keep Stripe flow
+
+Tags:
+v0.1.0-landing
+
+Uncommitted changes (if any):
+?? CARE_STATUS_REPORT.txt
+?? project-status.ps1
+
+# Diff since v0.1.0-landing
+---------------------------
+M	.env.example
+M	.gitignore
+M	src/app/page.tsx
+
+# Key Files
+-----------
+src/app/page.tsx                              OK
+src/app/api/stripe/checkout/route.ts          OK
+src/app/studio/[[...tool]]/page.tsx           missing
+src/app/studio/page.tsx                       missing
+
+# App Routes (page.tsx files)
+-----------------------------
+src\app\page.tsx
+src\app\admin\pricing\page.tsx
+src\app\admin\stripe\page.tsx
+src\app\billing\page.tsx
+src\app\billing\receipts\page.tsx
+src\app\blog\page.tsx
+src\app\blog\[slug]\page.tsx
+src\app\cancel\page.tsx
+src\app\company\page.tsx
+src\app\login\page.tsx
+src\app\pricing\page.tsx
+src\app\studio\[[...tool]]\page.tsx
+src\app\success\page.tsx
+
+# package.json
+--------------
+name: radiant-ts
+version: 0.1.0
+
+scripts:
+  dev: next dev
+  build: next build
+  start: next start
+  lint: next lint
+  postinstall: prisma generate
+  typegen: sanity schema extract --path=src/sanity/extract.json && sanity typegen generate && rm ./src/sanity/extract.json
+  dev:web: next dev -p 3000
+  dev:server: tsx backend/server.ts
+  dev:all: concurrently -k -n WEB,API "npm:dev:web" "npm:dev:server"
+  dev:3001: next dev -p 3001
+
+dependencies (selected):
+  next               15.4.4
+  react              ^19
+  react-dom          ^19
+  stripe             ^18.5.0
+  prisma             ^6.15.0
+  @prisma/client     ^6.15.0
+  sanity             ^4.2.0
+  next-sanity        ^10.0.5
+
+devDependencies (selected):
+  typescript         ^5
+  eslint             ^9
+  eslint-config-next 15.4.4
+  tailwindcss        ^4.1.11
+
+# .env files
+------------
+Found .env:       yes
+Found .env.local: yes
+Found .env.example: yes
+
+.env.example contents:
+NEXT_PUBLIC_APP_BASE_URL=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+STRIPE_PRICE_LITE=
+STRIPE_PRICE_ELITE=
+STRIPE_PRICE_DONATION_ONE_TIME=
+STRIPE_PRICE_DONATION=
+
+# Notes
+-------
+ Keep /api/stripe/checkout as-is (idempotency, URLs clean).
+ Plans expected by API: lite, elite, donation, donation-monthly.
+ Keep only src/app/studio/[[...tool]]/page.tsx (avoid duplicate /studio/page.tsx).
+ Dev: npm run dev  (binds to 127.0.0.1:3000 if you set it in package.json).
+ Do NOT commit .env / .env.local (use .env.example).

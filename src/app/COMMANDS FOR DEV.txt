@@ -1,0 +1,4 @@
+cd "C:\Users\doitr\OneDrive\Desktop\radiant-ts"
+npm pkg get name   # should print "radiant-ts"
+npm run dev        # should start on http://127.0.0.1:3000
+npm run backup     # should create ..\radiant-ts-backup.zip

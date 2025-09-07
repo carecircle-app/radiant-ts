@@ -1,31 +1,17 @@
 // src/lib/stripe.ts
-import "server-only";
-import Stripe from "stripe";
+import 'server-only';
+import Stripe from 'stripe';
 
-/**
- * Server-only Stripe singleton.
- * Avoids hard-coding apiVersion so it stays compatible with the SDK types
- * and uses the version tied to your secret key in Stripe.
- */
+const apiVersion: Stripe.LatestApiVersion = '2025-08-27.basil';
 
-let _stripe: Stripe | null = null;
+export const stripe = new Stripe(
+  process.env.STRIPE_SECRET_KEY ?? '',
+  { apiVersion, appInfo: { name: 'CareCircle' } }
+);
 
-function requireSecret(): string {
-  const key = (process.env.STRIPE_SECRET_KEY || "").trim();
-  if (!key || !key.startsWith("sk_")) {
-    throw new Error("STRIPE_SECRET_KEY is missing/invalid in environment.");
+// tiny runtime guard for server routes only (optional)
+export function assertServer() {
+  if (typeof window !== 'undefined') {
+    throw new Error('Stripe server helper used on the client.');
   }
-  return key;
 }
-
-export function getStripe(): Stripe {
-  if (_stripe) return _stripe;
-  _stripe = new Stripe(requireSecret());
-  return _stripe;
-}
-
-/** Convenience export for places that do `import { stripe } from '@/lib/stripe'` */
-export const stripe = getStripe();
-
-/** Optional: quick feature flag for guards */
-export const hasStripe = !!(process.env.STRIPE_SECRET_KEY || "").trim();

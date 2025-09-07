@@ -1,10 +1,7 @@
 ﻿const fs = require('fs');
 const path = require('path');
-
-function has(p){ return fs.existsSync(p) ? 'YES' : 'NO'; }
-function read(p){ try { return fs.readFileSync(p, 'utf8'); } catch { return '(missing)'; }
-
-}
+const has = p => (fs.existsSync(p) ? 'YES' : 'NO');
+const read = p => { try { return fs.readFileSync(p, 'utf8'); } catch { return '(missing)'; } };
 
 console.log('=== PREBUILD CHECK ===');
 console.log('CWD                 :', process.cwd());
@@ -15,7 +12,8 @@ console.log('Has eslint.config.mjs:', has('eslint.config.mjs'));
 try {
   const pkg = require(path.resolve('package.json'));
   console.log('Build script        :', (pkg.scripts && pkg.scripts.build) || '(none)');
-} catch { console.log('Build script        : (cannot read package.json)'); }
+  console.log('Prebuild script     :', (pkg.scripts && pkg.scripts.prebuild) || '(none)');
+} catch { console.log('Build/Prebuild      : (cannot read package.json)'); }
 
 if (fs.existsSync('next.config.js')) {
   const lines = read('next.config.js').split(/\r?\n/).slice(0,50).join('\n');

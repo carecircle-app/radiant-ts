@@ -1,0 +1,3 @@
+﻿# Never upload the local API server to Vercel
+backend/**
+uploads/**

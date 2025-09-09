@@ -19,12 +19,13 @@
         "backup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\backup.ps1"
     },
     "devDependencies": {
-        "@types/node": "24.3.1",
+        "@types/node": "^24.3.1",
         "@types/react": "19.1.12",
         "@typescript-eslint/eslint-plugin": "^8.43.0",
         "@typescript-eslint/parser": "^8.43.0",
         "eslint": "^9.35.0",
-        "eslint-config-next": "^15.5.2"
+        "eslint-config-next": "^15.5.2",
+        "typescript": "^5.9.2"
     },
     "dependencies": {
         "next": "^15.5.2",

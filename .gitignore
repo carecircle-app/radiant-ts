@@ -28,3 +28,7 @@ npm-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .DS_Store
+# Local snapshots and backups
+vbank/
+**/*.backup-*.ts
+**/*.backup-*.tsx

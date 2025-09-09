@@ -1,0 +1,11 @@
+import createMiddleware from 'next-intl/middleware';
+
+export default createMiddleware({
+  locales: ['en', 'tl', 'es', 'fr', 'de', 'it', 'pt', 'nl', 'el', 'ru', 'pl', 'uk', 'cs', 'sk', 'hu', 'ro', 'bg', 'sr', 'sv', 'da', 'no', 'fi', 'is', 'ar', 'tr', 'fa', 'he', 'ku', 'ps', 'zh-CN', 'zh-HK', 'ja', 'ko', 'hi', 'bn', 'th', 'vi', 'ms', 'id', 'ur', 'ta', 'sw', 'ha', 'am', 'yo', 'zu', 'af'],
+  defaultLocale: 'en'
+});
+
+export const config = {
+  // Match root and any path starting with a supported locale
+  matcher: ['/', '/(en|tl|es|fr|de|it|pt|nl|el|ru|pl|uk|cs|sk|hu|ro|bg|sr|sv|da|no|fi|is|ar|tr|fa|he|ku|ps|zh-CN|zh-HK|ja|ko|hi|bn|th|vi|ms|id|ur|ta|sw|ha|am|yo|zu|af)/:path*']
+};

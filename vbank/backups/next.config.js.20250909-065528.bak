@@ -1,0 +1,20 @@
+﻿/// <reference types="next" />
+/** @type {import('next').NextConfig} */
+
+const nextConfig = {
+  reactStrictMode: true,
+  i18n: {
+    locales: [
+  'en','tl',
+  'es','fr','de','it','pt','nl','el',
+  'ru','pl','uk','cs','sk','hu','ro','bg','sr',
+  'sv','da','no','fi','is',
+  'ar','tr','fa','he','ku','ps',
+  'zh-CN','zh-HK','ja','ko','hi','bn','th','vi','ms','id','ur','ta',
+  'sw','ha','am','yo','zu','af'
+],
+    defaultLocale: 'en'
+  }
+};
+
+module.exports = nextConfig;

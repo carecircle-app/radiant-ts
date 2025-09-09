@@ -1,11 +1,11 @@
-// src/app/api/stripe/portal/route.ts
+﻿// src/app/api/stripe/portal/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// ——— Stripe init (avoid literal apiVersion mismatch) ———
+// â€”â€”â€” Stripe init (avoid literal apiVersion mismatch) â€”â€”â€”
 const secret = (process.env.STRIPE_SECRET_KEY || "").trim();
 if (!/^sk_/.test(secret)) {
   throw new Error(
@@ -14,7 +14,7 @@ if (!/^sk_/.test(secret)) {
 }
 const stripe = new Stripe(secret);
 
-// ——— Helpers ———
+// â€”â€”â€” Helpers â€”â€”â€”
 function baseFrom(req: NextRequest) {
   const host =
     req.headers.get("x-forwarded-host") ??

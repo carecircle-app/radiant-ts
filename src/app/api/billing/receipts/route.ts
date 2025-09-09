@@ -1,4 +1,4 @@
-// src/app/api/billing/receipts/route.ts
+﻿// src/app/api/billing/receipts/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";

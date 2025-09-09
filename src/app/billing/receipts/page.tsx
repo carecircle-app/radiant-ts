@@ -1,4 +1,4 @@
-// src/app/billing/receipts/page.tsx
+﻿// src/app/billing/receipts/page.tsx
 import React from "react";
 
 export const runtime = "nodejs";           // allow localhost fetch in dev
@@ -69,7 +69,7 @@ export default async function ReceiptsPage({
       ? Date.parse(r.ts_iso)
       : 0;
 
-  // Only “signal” events, newest → oldest
+  // Only â€œsignalâ€ events, newest â†’ oldest
   const rows = (receipts ?? [])
     .filter((r) =>
       [
@@ -85,7 +85,7 @@ export default async function ReceiptsPage({
   return (
     <main className="min-h-screen px-6 py-10">
       <section className="mx-auto max-w-4xl space-y-6">
-        <h1 className="text-2xl font-bold">Billing → Receipts</h1>
+        <h1 className="text-2xl font-bold">Billing â†’ Receipts</h1>
         <p className="opacity-80 text-sm">
           These rows are captured from Stripe webhooks (dev).
         </p>

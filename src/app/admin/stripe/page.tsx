@@ -1,4 +1,4 @@
-// src/app/admin/stripe/page.tsx
+﻿// src/app/admin/stripe/page.tsx
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
@@ -40,9 +40,9 @@ export default async function StripeAdminPage() {
               <div className="text-sm text-gray-500">ID</div>
               <div className="font-mono text-sm break-all">{s.id}</div>
               <div className="mt-2 text-sm">
-                <span className="font-medium">Status:</span> {s.status ?? "?"} •{" "}
-                <span className="font-medium">Customer:</span> {s.customer ?? "?"} •{" "}
-                <span className="font-medium">Price:</span> {s.price_id ?? "?"} •{" "}
+                <span className="font-medium">Status:</span> {s.status ?? "?"} â€¢{" "}
+                <span className="font-medium">Customer:</span> {s.customer ?? "?"} â€¢{" "}
+                <span className="font-medium">Price:</span> {s.price_id ?? "?"} â€¢{" "}
                 <span className="font-medium">Amount:</span> {s.plan_amount ?? "?"} {s.currency ?? ""}
               </div>
               <pre className="mt-3 text-xs overflow-auto max-h-48 bg-gray-50 p-3 rounded">{JSON.stringify(s, null, 2)}</pre>
@@ -60,8 +60,8 @@ export default async function StripeAdminPage() {
               <div className="text-sm text-gray-500">ID</div>
               <div className="font-mono text-sm break-all">{p.id}</div>
               <div className="mt-2 text-sm">
-                <span className="font-medium">Amount:</span> {p.amount} {p.currency} •{" "}
-                <span className="font-medium">Status:</span> {p.status ?? "?"} •{" "}
+                <span className="font-medium">Amount:</span> {p.amount} {p.currency} â€¢{" "}
+                <span className="font-medium">Status:</span> {p.status ?? "?"} â€¢{" "}
                 <span className="font-medium">Email:</span> {p.email ?? "?"}
               </div>
               <pre className="mt-3 text-xs overflow-auto max-h-48 bg-gray-50 p-3 rounded">{JSON.stringify(p, null, 2)}</pre>
@@ -79,8 +79,8 @@ export default async function StripeAdminPage() {
               <div className="text-sm text-gray-500">ID</div>
               <div className="font-mono text-sm break-all">{i.id}</div>
               <div className="mt-2 text-sm">
-                <span className="font-medium">Subscription:</span> {i.subscription ?? "—"} •{" "}
-                <span className="font-medium">Paid:</span> {i.amount_paid ?? 0} {i.currency ?? ""} •{" "}
+                <span className="font-medium">Subscription:</span> {i.subscription ?? "â€”"} â€¢{" "}
+                <span className="font-medium">Paid:</span> {i.amount_paid ?? 0} {i.currency ?? ""} â€¢{" "}
                 <span className="font-medium">Status:</span> {i.status ?? "?"}
               </div>
               {i.hosted_invoice_url ? (

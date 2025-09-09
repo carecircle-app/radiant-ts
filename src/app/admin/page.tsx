@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useEffect, useMemo, useState } from 'react'
 
 /** ---- tiny helpers ---- */
@@ -96,7 +96,7 @@ export default function AdminPage() {
           photoProof,
         }),
       }).then((res) => j(res))
-      alert('Task created ✅')
+      alert('Task created âœ…')
       await loadAll()
     } catch (e) {
       alert('Create failed: ' + (e as Error).message)
@@ -109,7 +109,7 @@ export default function AdminPage() {
         method: 'POST',
         headers: hdr,
       }).then((res) => j(res))
-      alert('ACK sent ✅')
+      alert('ACK sent âœ…')
       await loadAll()
     } catch (e) {
       alert('ACK failed: ' + (e as Error).message)
@@ -123,7 +123,7 @@ export default function AdminPage() {
         headers: { ...hdr, 'Content-Type': 'application/json' },
         body: JSON.stringify({ targetUserId, action, reason }),
       }).then((res) => j(res))
-      alert(`Enforce sent: ${action} ✅`)
+      alert(`Enforce sent: ${action} âœ…`)
     } catch (e) {
       alert('Enforce failed: ' + (e as Error).message)
     }
@@ -173,7 +173,7 @@ export default function AdminPage() {
         body: JSON.stringify({ key: pres.key }),
       }).then((res) => j(res))
 
-      alert('Proof uploaded & attached ✅')
+      alert('Proof uploaded & attached âœ…')
       setProofFile(null)
       setProofTaskId('')
       await loadAll()
@@ -338,7 +338,7 @@ export default function AdminPage() {
             value={proofTaskId}
             onChange={(e) => setProofTaskId(e.target.value)}
           >
-            <option value="">Select task…</option>
+            <option value="">Select taskâ€¦</option>
             {tasks.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.title}

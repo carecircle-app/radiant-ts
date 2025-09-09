@@ -1,4 +1,4 @@
-// src/app/api/stripe/debug/route.ts
+﻿// src/app/api/stripe/debug/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 

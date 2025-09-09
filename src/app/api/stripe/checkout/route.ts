@@ -1,4 +1,4 @@
-// src/app/api/stripe/checkout/route.ts
+﻿// src/app/api/stripe/checkout/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
   const idempotencyKey = `cs:${mode}:${plan}:${ip}:${minute}`;
 
   try {
-    // ✅ The only behavioral change from your broken version: clean URLs (no backslashes)
+    // âœ… The only behavioral change from your broken version: clean URLs (no backslashes)
     const session = await withTimeout(
       stripe.checkout.sessions.create(
         {

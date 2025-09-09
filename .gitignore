@@ -9,3 +9,22 @@ coverage/
 !.env.example
 prisma/dev.db
 .vercel
+
+# === CareCircle secrets & backups ===
+# Env files
+.env
+.env.*
+*.env
+*.env.local
+# Backups / vaults
+backups/
+vbank/
+# Node, Next.js, logs (sane defaults)
+node_modules/
+.next/
+out/
+dist/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store

@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from 'react'
  * - Task templates + custom title, Save/Cancel, one-time/daily/weekly scheduling
  * - Ack & Photo-proof toggles
  * - Reminder intervals (per task) + global defaults for Tasks/ADL/Events
- * - Per-kid manual controls (parental enforce actions incl. device shutdown)
+ * - Per-kid manual controls (parental enforce actions, incl. device_shutdown)
  */
 
 const API = 'http://127.0.0.1:4000'
@@ -65,14 +65,7 @@ type Task = {
   ackBy?: string
   __minorStage?: 0 | 1 | 2 | 3 | 4
   repeat?: 'none' | 'daily' | 'weekly'
-  // optional auto-enforce hints (stored server-side if supported)
-  autoEnforce?: boolean
-  autoAction?:
-    | 'screen_lock'
-    | 'network_pause'
-    | 'device_restart'
-    | 'device_shutdown'
-    | 'app_restart'
+  reminderIntervalMinutes?: number
 }
 
 type PlanKey = 'free' | 'lite' | 'elite'
@@ -84,44 +77,43 @@ type LocalKid = {
   name: string
   apiUserId?: string // maps to an API "Child" user id
   ip?: string
-  port?: number
+  port?: number // local agent port (per kid)
+  phone?: string // legacy single
   phones?: string[] // up to 5 numbers
   notes?: string
-  autoEnforce?: boolean
-  autoAction?:
-    | 'screen_lock'
-    | 'network_pause'
-    | 'device_restart'
-    | 'device_shutdown'
-    | 'app_restart'
 }
 
-const LSK_KIDS = 'admin.localKids.v2'
+const LSK_KIDS = 'admin.localKids.v1'
 const LSK_OWNER = 'admin.ownerLabel.v1'
 const LSK_PLAN = 'admin.plan.v1'
+
+// --- Reminder presets (minutes) ---
+const REMINDER_OPTS: Array<{ label: string; min: number }> = [
+  { label: 'Off', min: 0 },
+  { label: 'Every 5 min', min: 5 },
+  { label: 'Every 10 min', min: 10 },
+  { label: 'Every 15 min', min: 15 },
+  { label: 'Every 30 min', min: 30 },
+  { label: 'Every 60 min', min: 60 },
+]
+// --- LocalStorage keys for global alert defaults ---
+const LSK_ALERT_TASK = 'admin.alerts.task.min'
+const LSK_ALERT_ADL = 'admin.alerts.adl.min'
+const LSK_ALERT_EVENT = 'admin.alerts.event.min'
 
 // Common chore templates
 const TEMPLATES = [
   'Clean room',
   'Wash dishes',
   'Take out trash',
-  'Homework',
+  'Mow the yard',
+  'Do homework',
+  'Soccer practice',
   'Laundry',
   'Feed pets',
   'Read 20 minutes',
   'Practice instrument',
 ]
-
-// Allowed device actions
-const ACTIONS = [
-  { v: 'play_loud_alert', label: 'Loud alert' },
-  { v: 'screen_lock', label: 'Lock screen' },
-  { v: 'network_pause', label: 'Pause network' },
-  { v: 'device_restart', label: 'Restart device' },
-  { v: 'device_shutdown', label: 'Shutdown device' },
-  { v: 'app_restart', label: 'Restart app' },
-] as const
-type ActionV = (typeof ACTIONS)[number]['v']
 
 export default function AdminPage() {
   // Acting user (auth header)
@@ -142,16 +134,36 @@ export default function AdminPage() {
   const [plan, setPlan] = useState<PlanKey>('elite')
   const maxKids = planLimits[plan]
 
-  // Local kids
+  // Global Alert defaults (persisted locally)
+  const [defTaskRemMin, setDefTaskRemMin] = useState<number>(15)
+  const [defAdlRemMin, setDefAdlRemMin] = useState<number>(15)
+  const [defEventRemMin, setDefEventRemMin] = useState<number>(15)
+
+  // Local kids (managed entirely client-side, up to 5)
   const [kids, setKids] = useState<LocalKid[]>([])
   useEffect(() => {
     try {
       const rawKids = localStorage.getItem(LSK_KIDS)
-      if (rawKids) setKids(JSON.parse(rawKids))
+      if (rawKids) {
+        const arr = JSON.parse(rawKids) as LocalKid[]
+        // migrate legacy single phone -> phones[0]
+        arr.forEach((k) => {
+          if (!k.phones) k.phones = k.phone ? [k.phone] : []
+          if (k.port == null) k.port = 8088 // default local agent port
+        })
+        setKids(arr)
+      }
       const rawOwner = localStorage.getItem(LSK_OWNER)
       if (rawOwner) setOwnerLabel(rawOwner)
       const rawPlan = localStorage.getItem(LSK_PLAN) as PlanKey | null
       if (rawPlan) setPlan(rawPlan)
+
+      const rawTaskRem = localStorage.getItem(LSK_ALERT_TASK)
+      if (rawTaskRem) setDefTaskRemMin(parseInt(rawTaskRem, 10))
+      const rawAdlRem = localStorage.getItem(LSK_ALERT_ADL)
+      if (rawAdlRem) setDefAdlRemMin(parseInt(rawAdlRem, 10))
+      const rawEvtRem = localStorage.getItem(LSK_ALERT_EVENT)
+      if (rawEvtRem) setDefEventRemMin(parseInt(rawEvtRem, 10))
     } catch {}
   }, [])
   function persistKids(next: LocalKid[]) {
@@ -172,6 +184,24 @@ export default function AdminPage() {
       localStorage.setItem(LSK_PLAN, p)
     } catch {}
   }
+  function persistDefTaskRem(v: number) {
+    setDefTaskRemMin(v)
+    try {
+      localStorage.setItem(LSK_ALERT_TASK, String(v))
+    } catch {}
+  }
+  function persistDefAdlRem(v: number) {
+    setDefAdlRemMin(v)
+    try {
+      localStorage.setItem(LSK_ALERT_ADL, String(v))
+    } catch {}
+  }
+  function persistDefEventRem(v: number) {
+    setDefEventRemMin(v)
+    try {
+      localStorage.setItem(LSK_ALERT_EVENT, String(v))
+    } catch {}
+  }
 
   // Task creation state
   const [template, setTemplate] = useState<string>('')
@@ -185,9 +215,11 @@ export default function AdminPage() {
   const [ackRequired, setAckRequired] = useState<boolean>(true)
   const [photoProof, setPhotoProof] = useState<boolean>(true)
   const [selectedKidIds, setSelectedKidIds] = useState<string[]>([])
-  const [autoAction, setAutoAction] = useState<ActionV>('screen_lock')
-  const [autoEnforce, setAutoEnforce] = useState<boolean>(true)
   const [busy, setBusy] = useState(false)
+  const [remEveryMin, setRemEveryMin] = useState<number>(defTaskRemMin)
+  useEffect(() => {
+    setRemEveryMin(defTaskRemMin)
+  }, [defTaskRemMin])
 
   function resetForm() {
     setTemplate('')
@@ -199,21 +231,21 @@ export default function AdminPage() {
     setAckRequired(true)
     setPhotoProof(true)
     setSelectedKidIds([])
-    setAutoAction('screen_lock')
-    setAutoEnforce(true)
+    setRemEveryMin(defTaskRemMin)
   }
 
   function toggleKid(id: string) {
-    setSelectedKidIds((prev) => {
-      if (prev.includes(id)) return prev.filter((x) => x !== id)
-      if (prev.length >= maxKids) {
-        alert(
-          `Your plan (${plan}) allows up to ${maxKids === 999 ? 'unlimited' : maxKids} child${maxKids > 1 ? 'ren' : ''}.`,
-        )
-        return prev
-      }
-      return [...prev, id]
-    })
+    if (selectedKidIds.includes(id)) {
+      setSelectedKidIds(selectedKidIds.filter((x) => x !== id))
+      return
+    }
+    if (selectedKidIds.length >= maxKids) {
+      alert(
+        `Your plan (${plan}) allows up to ${maxKids === 999 ? 'unlimited' : maxKids} child${maxKids > 1 ? 'ren' : ''}.`,
+      )
+      return
+    }
+    setSelectedKidIds([...selectedKidIds, id])
   }
 
   // Load API data
@@ -244,7 +276,9 @@ export default function AdminPage() {
 
     setBusy(true)
     try {
+      // Resolve default apiUserId if a local kid has none
       const defaultChildId = childUsers[0]?.id
+
       const { h, m } = parseTimeHHMM(timeHHMM)
       const posts: Promise<any>[] = []
 
@@ -271,9 +305,7 @@ export default function AdminPage() {
               ackRequired,
               photoProof,
               repeat: recurrence,
-              // hint to backend for auto-enforcement (if supported)
-              autoEnforce,
-              autoAction,
+              reminderIntervalMinutes: remEveryMin || undefined,
             }),
           }).then(j),
         )
@@ -302,8 +334,8 @@ export default function AdminPage() {
     }
   }
 
-  // Parental enforce
-  async function enforce(apiUserId: string, action: ActionV, reason: string) {
+  // Parental enforce / manual device actions
+  async function enforce(apiUserId: string, action: string, reason: string) {
     try {
       await fetch(`${API}/api/parental/enforce`, {
         method: 'POST',
@@ -313,6 +345,22 @@ export default function AdminPage() {
       alert(`Enforce sent: ${action} ✅`)
     } catch (e) {
       alert('Enforce failed: ' + (e as Error).message)
+    }
+  }
+  async function manualDeviceAction(
+    apiUserId: string,
+    action: string,
+    reason: string,
+  ) {
+    try {
+      await fetch(`${API}/api/parental/enforce`, {
+        method: 'POST',
+        headers: { ...hdr, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetUserId: apiUserId, action, reason }),
+      }).then(j)
+      alert(`${action} sent ✅`)
+    } catch (e) {
+      alert(`${action} failed: ` + (e as Error).message)
     }
   }
 
@@ -327,39 +375,53 @@ export default function AdminPage() {
     if (v) setTitle(v)
   }
 
-  // Add / remove / update local kid (max 5)
+  // Add/update/remove local kid
   function addKid() {
-    if (kids.length >= 5) return alert('You can keep up to 5 local kids.')
-    const id = 'k-' + Math.random().toString(36).slice(2, 8)
-    const next: LocalKid[] = [...kids, { id, name: 'New child', phones: [] }]
+  if (kids.length >= 5) return alert("You can keep up to 5 local kids.");
+  const id = "k-" + Math.random().toString(36).slice(2, 8);
+  const next = [...kids, { id, name: "New child", port: 8088, phones: [], autoEnforce: false }];
+  persistKids(next);
+}]
     persistKids(next)
   }
   function removeKid(id: string) {
     const next = kids.filter((k) => k.id !== id)
     persistKids(next)
-    setSelectedKidIds((prev) => prev.filter((x) => x !== id))
+    setSelectedKidIds(selectedKidIds.filter((x) => x !== id))
   }
   function updateKid(id: string, patch: Partial<LocalKid>) {
     persistKids(kids.map((k) => (k.id === id ? { ...k, ...patch } : k)))
   }
-  function updateKidPhone(id: string, idx: number, value: string) {
-    const kid = kids.find((k) => k.id === id)
-    const phones = (kid?.phones || []).slice()
-    phones[idx] = value
-    updateKid(id, { phones })
+  function updateKidPhone(kidId: string, idx: number, value: string) {
+    persistKids(
+      kids.map((k) => {
+        if (k.id !== kidId) return k
+        const phones = (k.phones || []).slice()
+        phones[idx] = value
+        return { ...k, phones }
+      }),
+    )
   }
-  function addKidPhone(id: string) {
-    const kid = kids.find((k) => k.id === id)
-    const phones = (kid?.phones || []).slice()
-    if (phones.length >= 5) return
-    phones.push('')
-    updateKid(id, { phones })
+  function addKidPhone(kidId: string) {
+    persistKids(
+      kids.map((k) => {
+        if (k.id !== kidId) return k
+        const phones = (k.phones || []).slice()
+        if (phones.length >= 5) return k
+        phones.push('')
+        return { ...k, phones }
+      }),
+    )
   }
-  function removeKidPhone(id: string, idx: number) {
-    const kid = kids.find((k) => k.id === id)
-    const phones = (kid?.phones || []).slice()
-    phones.splice(idx, 1)
-    updateKid(id, { phones })
+  function removeKidPhone(kidId: string, idx: number) {
+    persistKids(
+      kids.map((k) => {
+        if (k.id !== kidId) return k
+        const phones = (k.phones || []).slice()
+        phones.splice(idx, 1)
+        return { ...k, phones }
+      }),
+    )
   }
 
   return (
@@ -423,7 +485,60 @@ export default function AdminPage() {
         </div>
       </section>
 
-      {/* Local Kids */}
+      {/* Global Alerts Defaults */}
+      <section className="grid gap-3 rounded border p-4">
+        <h2 className="font-medium">Global Alerts Defaults</h2>
+        <div className="grid gap-3 md:grid-cols-3">
+          <label className="grid gap-1">
+            <span className="text-sm text-gray-600">Minor Tasks</span>
+            <select
+              className="rounded border px-2 py-1"
+              value={defTaskRemMin}
+              onChange={(e) => persistDefTaskRem(parseInt(e.target.value, 10))}
+            >
+              {REMINDER_OPTS.map((o) => (
+                <option key={o.min} value={o.min}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1">
+            <span className="text-sm text-gray-600">ADL / Care Tasks</span>
+            <select
+              className="rounded border px-2 py-1"
+              value={defAdlRemMin}
+              onChange={(e) => persistDefAdlRem(parseInt(e.target.value, 10))}
+            >
+              {REMINDER_OPTS.map((o) => (
+                <option key={o.min} value={o.min}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1">
+            <span className="text-sm text-gray-600">Calendar Events</span>
+            <select
+              className="rounded border px-2 py-1"
+              value={defEventRemMin}
+              onChange={(e) => persistDefEventRem(parseInt(e.target.value, 10))}
+            >
+              {REMINDER_OPTS.map((o) => (
+                <option key={o.min} value={o.min}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="text-xs text-gray-500">
+          New items default to these reminder intervals. You can still override
+          per item.
+        </div>
+      </section>
+
+      {/* Local Kids (name/IP/port/phones; map to API child) */}
       <section className="grid gap-3 rounded border p-4">
         <div className="flex items-center justify-between">
           <h2 className="font-medium">Kids (local, max 5)</h2>
@@ -435,6 +550,7 @@ export default function AdminPage() {
             Add child
           </button>
         </div>
+
         <div className="grid gap-3">
           {kids.length === 0 && (
             <div className="text-sm text-gray-500">
@@ -442,7 +558,7 @@ export default function AdminPage() {
             </div>
           )}
           {kids.map((k) => (
-            <div key={k.id} className="grid gap-3 rounded border p-3">
+            <div key={k.id} className="grid gap-2 rounded border p-3">
               <div className="grid items-end gap-2 md:grid-cols-6">
                 <label className="grid gap-1">
                   <span className="text-sm text-gray-600">Name</span>
@@ -452,6 +568,7 @@ export default function AdminPage() {
                     onChange={(e) => updateKid(k.id, { name: e.target.value })}
                   />
                 </label>
+
                 <label className="grid gap-1">
                   <span className="text-sm text-gray-600">
                     Map to API Child
@@ -473,116 +590,177 @@ export default function AdminPage() {
                     ))}
                   </select>
                 </label>
+
                 <label className="grid gap-1">
                   <span className="text-sm text-gray-600">Device IP</span>
                   <input
                     className="rounded border px-2 py-1"
-                    placeholder="192.168.1.42"
+                    placeholder="e.g. 192.168.1.42"
                     value={k.ip || ''}
                     onChange={(e) => updateKid(k.id, { ip: e.target.value })}
                   />
                 </label>
+
                 <label className="grid gap-1">
-                  <span className="text-sm text-gray-600">Port</span>
+                  <span className="text-sm text-gray-600">Agent Port</span>
                   <input
                     type="number"
+                    min={1}
                     className="rounded border px-2 py-1"
-                    placeholder="8088"
-                    value={k.port ?? ''}
+                    value={k.port ?? 8088}
                     onChange={(e) =>
                       updateKid(k.id, {
-                        port: e.target.value
-                          ? parseInt(e.target.value, 10)
-                          : undefined,
+                        port: parseInt(e.target.value || '0', 10) || 8088,
                       })
                     }
                   />
                 </label>
-                <label className="grid gap-1">
-                  <span className="text-sm text-gray-600">Auto/Manual</span>
-                  <select
-                    className="rounded border px-2 py-1"
-                    value={k.autoEnforce ? 'auto' : 'manual'}
-                    onChange={(e) =>
-                      updateKid(k.id, {
-                        autoEnforce: e.target.value === 'auto',
-                      })
-                    }
-                  >
-                    <option value="auto">Automatic</option>
-                    <option value="manual">Manual only</option>
-                  </select>
-                </label>
-                <label className="grid gap-1">
-                  <span className="text-sm text-gray-600">Auto Action</span>
-                  <select
-                    className="rounded border px-2 py-1"
-                    value={k.autoAction || 'screen_lock'}
-                    onChange={(e) =>
-                      updateKid(k.id, {
-                        autoAction: e.target.value as LocalKid['autoAction'],
-                      })
-                    }
-                  >
-                    {ACTIONS.map((a) => (
-                      <option key={a.v} value={a.v}>
-                        {a.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
 
-              {/* phones */}
-              <div className="grid gap-2">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-600">
-                    Phone numbers (up to 5)
-                  </div>
-                  <button
-                    className="rounded border px-2 py-1 text-sm"
-                    onClick={() => addKidPhone(k.id)}
-                    disabled={(k.phones || []).length >= 5}
-                  >
-                    Add phone
-                  </button>
-                </div>
-                {(k.phones || []).map((p, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <input
-                      className="rounded border px-2 py-1"
-                      placeholder="+1 555…"
-                      value={p}
-                      onChange={(e) => updateKidPhone(k.id, i, e.target.value)}
-                    />
+                <div className="grid gap-1 md:col-span-2">
+                  <span className="text-sm text-gray-600">
+                    Phone Numbers (up to 5)
+                  </span>
+                  <div className="grid gap-1">
+                    {(k.phones || []).map((p, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          className="flex-1 rounded border px-2 py-1"
+                          placeholder="e.g. +1 555-123-4567"
+                          value={p || ''}
+                          onChange={(e) =>
+                            updateKidPhone(k.id, idx, e.target.value)
+                          }
+                        />
+                        <button
+                          type="button"
+                          className="rounded border px-2 py-1"
+                          onClick={() => removeKidPhone(k.id, idx)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
                     <button
-                      className="rounded border px-2 py-1 text-sm"
-                      onClick={() => removeKidPhone(k.id, i)}
+                      type="button"
+                      className="w-max rounded border px-2 py-1"
+                      disabled={(k.phones?.length || 0) >= 5}
+                      onClick={() => addKidPhone(k.id)}
                     >
-                      Remove
+                      Add phone
                     </button>
                   </div>
-                ))}
-                {(k.phones || []).length === 0 && (
-                  <div className="text-xs text-gray-500">No phones added.</div>
-                )}
+                </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="text-xs text-gray-500">
+                  IP: {k.ip || '-'} · Port: {k.port ?? 8088} · Phones:{' '}
+                  {k.phones?.length || 0}
+                </div>
+                <div className="flex-1" />
                 <button
                   className="rounded border px-3 py-1"
                   onClick={() => removeKid(k.id)}
                 >
-                  Delete child
+                  Delete
                 </button>
+              </div>
+
+              {/* Manual controls per kid */}
+              <div className="flex flex-wrap gap-2">
+                {(() => {
+                  const apiUserId = k.apiUserId || childUsers[0]?.id
+                  return (
+                    <>
+                      <button
+                        className="rounded border px-2 py-1"
+                        disabled={!apiUserId}
+                        onClick={() =>
+                          manualDeviceAction(
+                            apiUserId!,
+                            'play_loud_alert',
+                            'Admin (manual)',
+                          )
+                        }
+                      >
+                        Loud alert
+                      </button>
+                      <button
+                        className="rounded border px-2 py-1"
+                        disabled={!apiUserId}
+                        onClick={() =>
+                          manualDeviceAction(
+                            apiUserId!,
+                            'screen_lock',
+                            'Admin (manual)',
+                          )
+                        }
+                      >
+                        Lock screen
+                      </button>
+                      <button
+                        className="rounded border px-2 py-1"
+                        disabled={!apiUserId}
+                        onClick={() =>
+                          manualDeviceAction(
+                            apiUserId!,
+                            'network_pause',
+                            'Admin (manual)',
+                          )
+                        }
+                      >
+                        Pause network
+                      </button>
+                      <button
+                        className="rounded border px-2 py-1"
+                        disabled={!apiUserId}
+                        onClick={() =>
+                          manualDeviceAction(
+                            apiUserId!,
+                            'device_restart',
+                            'Admin (manual)',
+                          )
+                        }
+                      >
+                        Device restart
+                      </button>
+                      <button
+                        className="rounded border px-2 py-1"
+                        disabled={!apiUserId}
+                        onClick={() =>
+                          manualDeviceAction(
+                            apiUserId!,
+                            'device_shutdown',
+                            'Admin (manual)',
+                          )
+                        }
+                      >
+                        Device shutdown
+                      </button>
+                      <button
+                        className="rounded border px-2 py-1"
+                        disabled={!apiUserId}
+                        onClick={() =>
+                          manualDeviceAction(
+                            apiUserId!,
+                            'app_restart',
+                            'Admin (manual)',
+                          )
+                        }
+                      >
+                        App restart
+                      </button>
+                    </>
+                  )
+                })()}
               </div>
             </div>
           ))}
         </div>
+
         <div className="text-xs text-gray-500">
           (Names, IPs, ports, phones are stored <b>locally</b> in your browser.
-          They’re not sent to the server. Parental actions use the mapped API
-          Child.)
+          They aren’t sent to the server.)
         </div>
       </section>
 
@@ -590,7 +768,7 @@ export default function AdminPage() {
       <section className="grid gap-3 rounded border p-4">
         <h2 className="font-medium">Create Minor Tasks</h2>
 
-        {/* Select assignees */}
+        {/* Choose assignees (respect plan limit) */}
         <div className="grid gap-2">
           <div className="text-sm text-gray-600">
             Select up to {maxKids === 999 ? '∞' : maxKids} children
@@ -706,49 +884,21 @@ export default function AdminPage() {
               </select>
             </label>
           )}
-        </div>
-
         {/* options */}
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={ackRequired}
-              onChange={(e) => setAckRequired(e.target.checked)}
-            />{' '}
-            Ack required
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={photoProof}
-              onChange={(e) => setPhotoProof(e.target.checked)}
-            />{' '}
-            Photo proof
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={autoEnforce}
-              onChange={(e) => setAutoEnforce(e.target.checked)}
-            />{' '}
-            Auto enforce on overdue
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <span>Auto action</span>
-            <select
-              className="rounded border px-2 py-1"
-              value={autoAction}
-              onChange={(e) => setAutoAction(e.target.value as ActionV)}
-            >
-              {ACTIONS.map((a) => (
-                <option key={a.v} value={a.v}>
-                  {a.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+<div className="flex flex-wrap items-center gap-4">
+  <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={ackRequired} onChange={(e)=> setAckRequired(e.target.checked)} /> Ack required</label>
+  <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={photoProof} onChange={(e)=> setPhotoProof(e.target.checked)} /> Photo proof</label>
+  <label className="flex items-center gap-2 text-sm">
+    <span>Auto action when overdue</span>
+    <select className="border rounded px-2 py-1" value={autoAction} onChange={(e)=> setAutoAction(e.target.value)}>
+      <option value="screen_lock">Lock screen</option>
+      <option value="network_pause">Pause network</option>
+      <option value="device_restart">Restart device</option>
+      <option value="device_shutdown">Shutdown device</option>
+      <option value="app_restart">Restart app</option>
+    </select>
+  </label>
+</div>
 
         {/* Save / Cancel */}
         <div className="flex gap-2">
@@ -769,7 +919,7 @@ export default function AdminPage() {
         </div>
       </section>
 
-      {/* Parental Enforce */}
+      {/* Parental Enforce (quick actions against mapped API users) */}
       <section className="grid gap-2 rounded border p-4">
         <h2 className="font-medium">Parental Enforce</h2>
         <div className="grid gap-3">
@@ -785,21 +935,51 @@ export default function AdminPage() {
                 <div className="font-medium">
                   {k.name || '(unnamed)'}{' '}
                   <span className="text-xs text-gray-500">
-                    IP: {k.ip || '-'}:{k.port ?? '-'} • Phones:{' '}
-                    {(k.phones || []).filter(Boolean).join(', ') || '-'}
+                    IP: {k.ip || '-'} · Port: {k.port ?? 8088}
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {ACTIONS.map((a) => (
-                    <button
-                      key={a.v}
-                      className="rounded border px-2 py-1"
-                      disabled={!apiUserId}
-                      onClick={() => enforce(apiUserId!, a.v, 'Admin')}
-                    >
-                      {a.label}
-                    </button>
-                  ))}
+                  <button
+                    className="rounded border px-2 py-1"
+                    disabled={!apiUserId}
+                    onClick={() =>
+                      enforce(apiUserId!, 'play_loud_alert', 'Admin')
+                    }
+                  >
+                    Loud alert
+                  </button>
+                  <button
+                    className="rounded border px-2 py-1"
+                    disabled={!apiUserId}
+                    onClick={() => enforce(apiUserId!, 'screen_lock', 'Admin')}
+                  >
+                    Lock screen
+                  </button>
+                  <button
+                    className="rounded border px-2 py-1"
+                    disabled={!apiUserId}
+                    onClick={() =>
+                      enforce(apiUserId!, 'network_pause', 'Admin')
+                    }
+                  >
+                    Pause network
+                  </button>
+                  <button
+                    className="rounded border px-2 py-1"
+                    disabled={!apiUserId}
+                    onClick={() =>
+                      enforce(apiUserId!, 'device_restart', 'Admin')
+                    }
+                  >
+                    Device restart
+                  </button>
+                  <button
+                    className="rounded border px-2 py-1"
+                    disabled={!apiUserId}
+                    onClick={() => enforce(apiUserId!, 'app_restart', 'Admin')}
+                  >
+                    App restart
+                  </button>
                 </div>
               </div>
             )
@@ -871,3 +1051,4 @@ export default function AdminPage() {
     </div>
   )
 }
+

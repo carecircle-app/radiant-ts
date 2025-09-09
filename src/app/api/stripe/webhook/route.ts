@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 import { seenOncePersist } from "@/lib/eventStore";
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
     }
 
     switch (event.type) {
-      /* =================== CHECKOUT → SUBSCRIPTION =================== */
+      /* =================== CHECKOUT â†’ SUBSCRIPTION =================== */
       case "checkout.session.completed": {
         const s = event.data.object as Stripe.Checkout.Session;
 
@@ -361,7 +361,7 @@ export async function POST(req: NextRequest) {
       }
 
       default:
-        // Ack everything so Stripe doesn’t retry forever
+        // Ack everything so Stripe doesnâ€™t retry forever
         break;
     }
 

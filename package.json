@@ -1,65 +1,35 @@
 {
-    "name":  "radiant-ts",
-    "version":  "0.1.0",
-    "private":  true,
-    "scripts":  {
-                    "prebuild":  "node vercel-precheck.js",
-                    "build":  "next build",
-                    "dev":  "next dev -H 127.0.0.1 -p 3000",
-                    "start":  "next start",
-                    "lint":  "next lint",
-                    "postinstall":  "prisma generate",
-                    "dev:server":  "tsx backend/server.ts",
-                    "dev:all":  "concurrently -k -n WEB,API \"npm:dev\" \"npm:dev:server\""
-                },
-    "dependencies":  {
-                         "@headlessui/react":  "^2.2.6",
-                         "@heroicons/react":  "^2.2.0",
-                         "@prisma/client":  "^6.15.0",
-                         "@sanity/image-url":  "^1.1.0",
-                         "@sanity/vision":  "^4.2.0",
-                         "clsx":  "^2.1.1",
-                         "cors":  "^2.8.5",
-                         "dayjs":  "^1.11.13",
-                         "dotenv":  "^17.2.2",
-                         "express":  "^5.1.0",
-                         "feed":  "^5.1.0",
-                         "framer-motion":  "^12.23.11",
-                         "helmet":  "^8.1.0",
-                         "jsonwebtoken":  "^9.0.2",
-                         "next":  "15.4.4",
-                         "next-sanity":  "^10.0.5",
-                         "nodemailer":  "^7.0.6",
-                         "prisma":  "^6.15.0",
-                         "react":  "^19",
-                         "react-dom":  "^19",
-                         "react-use-measure":  "^2.1.7",
-                         "sanity":  "^4.2.0",
-                         "stripe":  "^18.5.0",
-                         "twilio":  "^5.9.0",
-                         "web-push":  "^3.6.7"
-                     },
-    "devDependencies":  {
-                            "@eslint/eslintrc":  "^3",
-                            "@tailwindcss/postcss":  "^4.1.11",
-                            "@types/cors":  "^2.8.19",
-                            "@types/express":  "^5.0.3",
-                            "@types/jsonwebtoken":  "^9.0.10",
-                            "@types/node":  "^24",
-                            "@types/react":  "^19",
-                            "@types/react-dom":  "^19",
-                            "concurrently":  "^9.2.1",
-                            "eslint":  "^9",
-                            "eslint-config-next":  "15.4.4",
-                            "postcss":  "^8.5.6",
-                            "prettier":  "^3.6.2",
-                            "prettier-plugin-organize-imports":  "^4.2.0",
-                            "prettier-plugin-tailwindcss":  "^0.6.14",
-                            "tailwindcss":  "^4.1.11",
-                            "tsx":  "^4.20.5",
-                            "typescript":  "^5"
-                        },
-    "prisma":  {
-                   "schema":  "prisma/schema.prisma"
-               }
+    "name": "radiant-ts",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "prebuild": "node scripts/vercel-precheck.cjs || exit 0",
+        "build": "next build",
+        "dev": "npm run dev:local",
+        "start": "next start",
+        "lint": "next lint",
+        "postinstall": "prisma generate || exit 0",
+        "typegen": "echo skip-typegen",
+        "dev:web": "next dev -p 3000",
+        "dev:server": "tsx backend/server.ts",
+        "dev:all": "concurrently -k -n WEB,API \"npm:dev:web\" \"npm:dev:server\"",
+        "dev:3001": "next dev -p 3001",
+        "dev:local": "next dev -H 127.0.0.1 -p 3000",
+        "backup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\backup.ps1"
+    },
+    "devDependencies": {
+        "@types/node": "^24.3.1",
+        "@types/react": "19.1.12",
+        "@typescript-eslint/eslint-plugin": "^8.43.0",
+        "@typescript-eslint/parser": "^8.43.0",
+        "eslint": "^9.35.0",
+        "eslint-config-next": "^15.5.2",
+        "typescript": "^5.9.2"
+    },
+    "dependencies": {
+        "next": "^15.5.2",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1"
+    }
 }

@@ -1,4 +1,4 @@
-// copy
+﻿// copy
 import { NextRequest, NextResponse } from "next/server";
 import { withTier } from "@/lib/withTier";
 

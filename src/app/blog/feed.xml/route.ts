@@ -1,15 +1,15 @@
-import { image } from '@/sanity/image';
+﻿import { image } from '@/sanity/image';
 import { getPostsForFeed } from '@/sanity/queries';
 import { Feed } from 'feed';
 import assert from 'node:assert';
 import { projectId, dataset } from '@/sanity/env';
 
 export async function GET(req: Request) {
-  // Guard: don’t break the build if Sanity isn’t configured
+  // Guard: donâ€™t break the build if Sanity isnâ€™t configured
   if (!projectId || !dataset) {
     return new Response('', { status: 204, headers: { 'cache-control': 's-maxage=60' } });
   }
-  // Guard: Sanity projectId must be lowercase a–z, 0–9, or dashes
+  // Guard: Sanity projectId must be lowercase aâ€“z, 0â€“9, or dashes
   if (!/^[a-z0-9-]+$/.test(projectId)) {
     return new Response('', { status: 204, headers: { 'cache-control': 's-maxage=60' } });
   }

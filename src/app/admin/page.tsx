@@ -1,2 +1,1 @@
-import { redirect } from "next/navigation";
-export default function AdminIndex() { redirect("/admin/pricing"); }
+import { redirect } from "next/navigation"; export default function AdminIndex(){ redirect("/admin/pricing"); }

@@ -19,17 +19,28 @@
         "backup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\backup.ps1"
     },
     "devDependencies": {
+        "@tailwindcss/postcss": "^4.1.13",
         "@types/node": "^24.3.1",
         "@types/react": "19.1.12",
         "@typescript-eslint/eslint-plugin": "^8.43.0",
         "@typescript-eslint/parser": "^8.43.0",
+        "autoprefixer": "^10.4.21",
         "eslint": "^9.35.0",
         "eslint-config-next": "^15.5.2",
+        "prisma": "^6.15.0",
+        "tailwindcss": "^4.1.13",
         "typescript": "^5.9.2"
     },
     "dependencies": {
+        "@headlessui/react": "^2.2.7",
+        "@heroicons/react": "^2.2.0",
+        "@prisma/client": "^6.15.0",
+        "framer-motion": "^12.23.12",
         "next": "^15.5.2",
+        "next-intl": "^4.3.7",
+        "nodemailer": "^7.0.6",
         "react": "^19.1.1",
-        "react-dom": "^19.1.1"
+        "react-dom": "^19.1.1",
+        "stripe": "^18.5.0"
     }
 }

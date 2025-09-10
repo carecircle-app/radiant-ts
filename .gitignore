@@ -34,3 +34,4 @@ vbank/
 **/*.backup-*.tsx
 
 tsconfig.tsbuildinfo
+tsconfig.tsbuildinfo

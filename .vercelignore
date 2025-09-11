@@ -1,5 +1,7 @@
 ﻿vbank/
+**/vbank/**
 backups/
+**/backups/**
 node_modules/
 .next/
 .turbo/
@@ -8,8 +10,10 @@ coverage/
 dist/
 build/
 tmp/
-*.log
 *.zip
 *.7z
 *.tar
 *.gz
+*.log
+.vscode/
+*.code-workspace

@@ -1,5 +1,12 @@
-// src/app/page.tsx — long landing with science-backed color psychology
+// NOTE: Do NOT add "use client" here.
+import Link from "next/link";
+
 import StripeCTAButtons from "@/components/StripeCTAButtons";
+import { Container } from "@/components/container";
+import { Testimonials } from "@/components/Testimonials";
+
+
+// Icons for presentational sections
 import {
   MapPinIcon,
   CalendarDaysIcon,
@@ -11,19 +18,20 @@ import {
   CpuChipIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
-import type { SVGProps, ComponentType } from "react"; // ✅ TS fix
+import type { SVGProps, ComponentType } from "react";
 
-export const metadata = {
-  title: "CareCircle — Coordinate care with confidence",
-  description:
-    "Shared calendars, medication reminders, geofencing alerts, secure chat, and visit notes — all in one app for families and caregivers.",
-};
-
-// ✅ use React types (avoids 'Cannot find namespace JSX')
+// Small helpers for presentational cards (server-safe)
 type IconT = ComponentType<SVGProps<SVGSVGElement>>;
 
-/* ---------- Presentational cards ---------- */
-function FeatureCard({ title, body, Icon }: { title: string; body: string; Icon: IconT }) {
+function FeatureCard({
+  title,
+  body,
+  Icon,
+}: {
+  title: string;
+  body: string;
+  Icon: IconT;
+}) {
   return (
     <div className="rounded-2xl border border-gray-200/70 bg-white/70 p-5 shadow-sm">
       <div className="flex items-start gap-3">
@@ -66,65 +74,25 @@ function StepCard({
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-neutral-50">
-      {/* === TOP MINI-CTA BAR (indigo = trustworthy primary) === */}
-      <section aria-label="Quick sign-up" className="bg-white/80">
-        <div className="mx-auto max-w-5xl px-6 pt-6">
-          <div className="rounded-2xl border bg-white shadow-sm">
-            <div className="flex items-center justify-center gap-3 py-3">
-              <a
-                href="#plans"
-                className="inline-flex items-center rounded-full bg-indigo-600 text-white px-5 py-2 text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-              >
-                Get started
-              </a>
-              <a
-                href="#plans"
-                className="inline-flex items-center rounded-full border border-indigo-200 text-indigo-700 px-5 py-2 text-sm font-medium hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-              >
-                Demo video
-              </a>
+    <div className="min-h-screen flex flex-col bg-neutral-50">
+      {/* Simple hero with a top CTA block */}
+      <header className="bg-gradient-to-br from-blue-100 via-green-100 to-purple-200">
+        <Container>
+          <div className="mx-auto max-w-3xl py-20 text-center">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900">
+              Calm, coordinated care for your family
+            </h1>
+            <p className="mt-4 text-gray-700">
+              Share tasks, updates, and support in one private space.
+            </p>
+            <div className="mt-8 flex justify-center">
+              <StripeCTAButtons />
             </div>
           </div>
-        </div>
-        <div className="mx-auto max-w-5xl px-6">
-          <hr className="my-4 border-gray-200/70" />
-        </div>
-      </section>
+        </Container>
+      </header>
 
-      {/* === HERO with clinically calming gradient (blue → lavender → rose) === */}
-      <section className="mx-auto max-w-5xl px-6">
-        <div className="rounded-3xl border overflow-hidden shadow-sm">
-          <div className="bg-[linear-gradient(135deg,_#D6E9FF_0%,_#E9D7FF_52%,_#FFE3EC_100%)]">
-            <div className="px-8 sm:px-14 py-16 sm:py-20 text-center">
-              <h1 className="text-[38px] leading-tight sm:text-6xl font-extrabold tracking-tight text-slate-900">
-                Coordinate care with
-                <br className="hidden sm:block" /> confidence.
-              </h1>
-              <p className="mt-4 text-sm sm:text-base text-slate-700 max-w-2xl mx-auto">
-                Shared calendars, medication reminders, geofencing alerts, and secure
-                messaging — all in one app for families and caregivers.
-              </p>
-              <div className="mt-8 flex items-center justify-center gap-3">
-                <a
-                  href="#plans"
-                  className="inline-flex items-center rounded-full bg-indigo-600 text-white px-5 py-2 text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-                >
-                  Get started
-                </a>
-                <a
-                  href="#plans"
-                  className="inline-flex items-center rounded-full border border-indigo-200 text-indigo-700 px-5 py-2 text-sm font-medium hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-                >
-                  Demo video
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* === FEATURE ICON GRID (map pin, calendar, chat, etc.) === */}
+      {/* Feature icon grid (presentational only) */}
       <section className="mx-auto max-w-5xl px-6 pt-12 pb-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <FeatureCard
@@ -160,52 +128,99 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === CHOOSE PLAN (your existing Stripe buttons) === */}
-      <section id="plans" className="mx-auto max-w-5xl px-6 pb-16">
-        <div className="text-center mb-4">
-          <h2 className="text-lg font-semibold text-slate-900">Choose Your Plan</h2>
-        </div>
-        <div className="mx-auto max-w-md">
+      <main className="flex-1">
+        {/* Mid-page CTA — anchor so any “Get started” links can scroll here */}
+        <section
+          id="plans"
+          className="py-20 bg-gradient-to-r from-blue-50 via-green-50 to-purple-100"
+        >
+          <Container>
+            <div className="mx-auto max-w-3xl text-center">
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                Get started in seconds
+              </h3>
+              <p className="mt-4 text-gray-600">
+                Pick a plan that fits your family. You can switch or cancel
+                anytime.
+              </p>
+              <div className="mt-8 flex justify-center">
+                <StripeCTAButtons />
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* How it works (presentational only) */}
+        <section className="mx-auto max-w-5xl px-6 pb-16">
+          <h2 className="text-center text-xl font-semibold text-slate-900 mb-6">
+            How it works
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <StepCard
+              step={1}
+              title="Invite your circle"
+              body="Create an account, invite family and caregivers, and set roles."
+              Icon={ComputerDesktopIcon}
+            />
+            <StepCard
+              step={2}
+              title="Sync the plan"
+              body="Add appointments, meds, and zones to get real-time alerts."
+              Icon={CpuChipIcon}
+            />
+            <StepCard
+              step={3}
+              title="Share safely"
+              body="Best-practice security and role-based access keep data private."
+              Icon={LockClosedIcon}
+            />
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="py-20 bg-white">
+          <Container>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-center text-gray-900 mb-12">
+              Families love the calm CareCircle creates
+            </h2>
+            <Testimonials />
+          </Container>
+        </section>
+      </main>
+
+      {/* Bottom CTA */}
+      <section className="py-16 text-center bg-gradient-to-r from-blue-50 via-green-50 to-purple-100">
+        <h2 className="text-2xl font-semibold mb-4">
+          Ready to support CareCircle?
+        </h2>
+        <div className="flex justify-center">
           <StripeCTAButtons />
         </div>
-        <p className="mt-6 text-center text-xs text-slate-500">
-          Test cards only — Powered by Stripe Checkout
+        <p className="mt-3 text-sm text-gray-600">
+          Your subscription or donation helps families everywhere coordinate
+          care with ease.
         </p>
       </section>
 
-      {/* === HOW IT WORKS (keeps scroll depth and trust cues) === */}
-      <section className="mx-auto max-w-5xl px-6 pb-16">
-        <h2 className="text-center text-xl font-semibold text-slate-900 mb-6">
-          How it works
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <StepCard
-            step={1}
-            title="Invite your circle"
-            body="Create an account, invite family and caregivers, and set roles."
-            Icon={ComputerDesktopIcon}
-          />
-          <StepCard
-            step={2}
-            title="Sync the plan"
-            body="Add appointments, meds, and zones to get real-time alerts."
-            Icon={CpuChipIcon}
-          />
-          <StepCard
-            step={3}
-            title="Share safely"
-            body="Best-practice security and role-based access keep data private."
-            Icon={LockClosedIcon}
-          />
-        </div>
-      </section>
-
-      {/* === BOTTOM CTA (repeat) === */}
-      <section className="mx-auto max-w-5xl px-6 pb-24">
-        <div className="mx-auto max-w-md">
-          <StripeCTAButtons />
-        </div>
-      </section>
-    </main>
+      {/* Footer */}
+      <footer className="bg-gradient-to-tr from-blue-100 via-green-100 to-purple-200 py-10">
+        <Container className="text-center">
+          <p className="text-sm text-gray-700 mb-4">
+            © {new Date().getFullYear()} CareCircle. All rights reserved.
+          </p>
+          <div className="flex justify-center gap-6 text-sm">
+            <Link href="/privacy" className="text-blue-700 hover:underline">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-blue-700 hover:underline">
+              Terms of Service
+            </Link>
+            <Link href="/refunds" className="text-blue-700 hover:underline">
+              Refund Policy
+            </Link>
+          </div>
+        </Container>
+      </footer>
+    </div>
   );
 }

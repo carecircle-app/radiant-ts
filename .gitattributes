@@ -1,13 +1,2 @@
-﻿# Default: text files normalized to LF
 * text=auto eol=lf
 
-# Explicitly ensure LF for common code/docs
-*.{ts,tsx,js,jsx,cts,mts,cjs,mjs,css,scss,md,json,yml,yaml,env} text eol=lf
-
-# Keep binary files untouched
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.gif binary
-*.ico binary
-*.pdf binary

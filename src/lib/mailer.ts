@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-require-imports */
 
 // src/lib/mailer.ts
 /**
@@ -11,7 +11,7 @@
 
 let nodemailer: any = null;
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+   
   nodemailer = require("nodemailer");
 } catch {
   nodemailer = null;

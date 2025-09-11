@@ -1,21 +1,17 @@
 ﻿import "./globals.css";
-import type { Metadata } from "next";
-import React from "react";
-import Nav from "../components/Nav";
+import type { ReactNode } from "react";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "CareCircle",
-  description: "CareCircle demo app",
+  description: "Calm, coordinated care for your family",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50 text-gray-900 antialiased">
-        <Nav />
-        <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+      <body className="min-h-screen bg-neutral-50 antialiased">
+        {children}
       </body>
     </html>
   );
 }
-

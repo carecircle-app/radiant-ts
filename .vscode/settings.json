@@ -1,4 +1,4 @@
-﻿{
+{
   "files.encoding": "utf8",
   "files.autoGuessEncoding": false,
   "files.eol": "\n",
@@ -8,5 +8,15 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  }
+  },
+
+  "eslint.useFlatConfig": true,
+  "eslint.workingDirectories": ["./"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

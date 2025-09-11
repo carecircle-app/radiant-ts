@@ -2,24 +2,17 @@
 import type { ReactNode } from "react";
 
 export const metadata = {
-<<<<<<< HEAD
   title: "CareCircle  Coordinate care with confidence",
-=======
-  title: "CareCircle",
-  description: "Calm, coordinated care for your family",
->>>>>>> 9020dc5 (force-200 root route test (diagnose 307))
+  description:
+    "Shared calendars, medication reminders, geofencing alerts, secure chat, and visit notes  all in one app for families and caregivers.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-<<<<<<< HEAD
-      <body>{children}</body>
-=======
       <body className="min-h-screen bg-neutral-50 antialiased">
         {children}
       </body>
->>>>>>> 9020dc5 (force-200 root route test (diagnose 307))
     </html>
   );
 }

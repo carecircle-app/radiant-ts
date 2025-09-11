@@ -31,7 +31,7 @@
  *   TWILIO_FROM=+15551234567
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
+ 
 import cors from 'cors'
 import crypto from 'crypto'
 import express, { Request, Response } from 'express'

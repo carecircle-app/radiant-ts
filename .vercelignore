@@ -1,3 +1,15 @@
-﻿# Never upload the local API server to Vercel
-backend/**
-uploads/**
+﻿vbank/
+backups/
+node_modules/
+.next/
+.turbo/
+.vercel/output/
+coverage/
+dist/
+build/
+tmp/
+*.log
+*.zip
+*.7z
+*.tar
+*.gz

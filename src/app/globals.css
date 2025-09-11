@@ -1,2 +1,3 @@
-﻿@import "../styles/tailwind.css";
-/* place any global styles here if needed */
+﻿/* minimal global styles */
+:root { color-scheme: light; }
+html, body { margin: 0; padding: 0; }

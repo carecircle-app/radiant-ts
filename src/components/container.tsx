@@ -1,15 +1,13 @@
-import { clsx } from 'clsx'
+﻿import type { ReactNode } from "react";
 
-export function Container({
-  className,
-  children,
-}: {
-  className?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className={clsx(className, 'px-6 lg:px-8')}>
-      <div className="mx-auto max-w-2xl lg:max-w-7xl">{children}</div>
-    </div>
-  )
+type Props = {
+  className?: string;
+  children?: ReactNode;
+};
+
+export function Container({ className = "", children }: Props) {
+  return <div className={`mx-auto max-w-7xl px-6 ${className}`}>{children}</div>;
 }
+
+// keep default to be backward compatible with older imports
+export default Container;

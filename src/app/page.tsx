@@ -1,4 +1,5 @@
-﻿import StripeCTAButtons from "@/components/StripeCTAButtons";
+﻿// src/app/page.tsx â€” long landing with science-backed color psycholgy
+import StripeCTAButtons from "@/components/StripeCTAButtons";
 import {
   MapPinIcon,
   CalendarDaysIcon,
@@ -10,20 +11,22 @@ import {
   CpuChipIcon,
   LockClosedIcon,
 } from "@heroicons/react/24/outline";
-import type { SVGProps, ComponentType } from "react";
+import type { SVGProps, ComponentType } from "react"; // âœ… TS fix
 
 export const metadata = {
-  title: "CareCircle  Coordinate care with confidence",
+  title: "CareCircle â€” Coordinate care with confidence",
   description:
-    "Shared calendars, medication reminders, geofencing alerts, secure chat, and visit notes — all in one app for families and caregivers.",
+    "Shared calendars, medication reminders, geofencing alerts, secure chat, and visit notes â€” all in one app for families and caregivers.",
 };
 
-// Proper typing for heroicons as components
+// âœ… use React types (avoids 'Cannot find namespace JSX')
 type IconT = ComponentType<SVGProps<SVGSVGElement>>;
 
+/* ---------- Presentational cards ---------- */
 function FeatureCard({ title, body, Icon }: { title: string; body: string; Icon: IconT }) {
   return (
-    <div className="rounded-2xl border border-gray-200/70 bg-white p-5 shadow-sm">
+<div className="mt-6 p-4 rounded-xl bg-lime-500 text-black font-bold text-center">Tailwind v4 is ACTIVE</div>
+    <div className="rounded-2xl border border-gray-200/70 bg-white/70 p-5 shadow-sm">
       <div className="flex items-start gap-3">
         <span className="inline-flex items-center justify-center rounded-xl border bg-white p-2">
           <Icon className="h-6 w-6 text-indigo-700" />
@@ -49,6 +52,7 @@ function StepCard({
   Icon: IconT;
 }) {
   return (
+<div className="mt-6 p-4 rounded-xl bg-lime-500 text-black font-bold text-center">Tailwind v4 is ACTIVE</div>
     <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm">
       <div className="flex items-center gap-3">
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white font-semibold text-indigo-700">
@@ -64,8 +68,9 @@ function StepCard({
 
 export default function HomePage() {
   return (
+<div className="mt-6 p-4 rounded-xl bg-lime-500 text-black font-bold text-center">Tailwind v4 is ACTIVE</div>
     <main className="min-h-screen bg-neutral-50">
-      {/* === TOP MINI-CTA BAR === */}
+      {/* === TOP MINI-CTA BAR (indigo = trustworthy primary) === */}
       <section aria-label="Quick sign-up" className="bg-white/80">
         <div className="mx-auto max-w-5xl px-6 pt-6">
           <div className="rounded-2xl border bg-white shadow-sm">
@@ -90,7 +95,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === HERO === */}
+      {/* === HERO with clinically calming gradient (blue â†’ lavender â†’ rose) === */}
       <section className="mx-auto max-w-5xl px-6">
         <div className="rounded-3xl border overflow-hidden shadow-sm">
           <div className="bg-[linear-gradient(135deg,_#D6E9FF_0%,_#E9D7FF_52%,_#FFE3EC_100%)]">
@@ -101,7 +106,7 @@ export default function HomePage() {
               </h1>
               <p className="mt-4 text-sm sm:text-base text-slate-700 max-w-2xl mx-auto">
                 Shared calendars, medication reminders, geofencing alerts, and secure
-                messaging  all in one app for families and caregivers.
+                messaging â€” all in one app for families and caregivers.
               </p>
               <div className="mt-8 flex items-center justify-center gap-3">
                 <a
@@ -122,7 +127,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === FEATURE GRID === */}
+      {/* === FEATURE ICON GRID (map pin, calendar, chat, etc.) === */}
       <section className="mx-auto max-w-5xl px-6 pt-12 pb-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <FeatureCard
@@ -158,7 +163,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === CHOOSE PLAN (Stripe buttons #1) === */}
+      {/* === CHOOSE PLAN (your existing Stripe buttons) === */}
       <section id="plans" className="mx-auto max-w-5xl px-6 pb-16">
         <div className="text-center mb-4">
           <h2 className="text-lg font-semibold text-slate-900">Choose Your Plan</h2>
@@ -167,11 +172,11 @@ export default function HomePage() {
           <StripeCTAButtons />
         </div>
         <p className="mt-6 text-center text-xs text-slate-500">
-          Test cards only  Powered by Stripe Checkout
+          Test cards only â€” Powered by Stripe Checkout
         </p>
       </section>
 
-      {/* === HOW IT WORKS === */}
+      {/* === HOW IT WORKS (keeps scroll depth and trust cues) === */}
       <section className="mx-auto max-w-5xl px-6 pb-16">
         <h2 className="text-center text-xl font-semibold text-slate-900 mb-6">
           How it works
@@ -198,7 +203,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === BOTTOM CTA (Stripe buttons #2) === */}
+      {/* === BOTTOM CTA (repeat) === */}
       <section className="mx-auto max-w-5xl px-6 pb-24">
         <div className="mx-auto max-w-md">
           <StripeCTAButtons />
@@ -207,3 +212,5 @@ export default function HomePage() {
     </main>
   );
 }
+
+

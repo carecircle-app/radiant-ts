@@ -1,5 +1,5 @@
 ﻿export const dynamic = "force-static";
-export const metadata = { title: "Thanks  CareCircle" };
+export const metadata = { title: "Thanks — CareCircle" };
 export default function SuccessPage() {
   return (
     <main className="mx-auto max-w-3xl p-6">

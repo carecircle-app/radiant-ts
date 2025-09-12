@@ -1,5 +1,5 @@
 ﻿export const dynamic = "force-static";
-export const metadata = { title: "Checkout canceled — CareCircle" };
+export const metadata = { title: "Checkout canceled  CareCircle" };
 export default function CancelPage() {
   return (
     <main className="mx-auto max-w-3xl p-6">

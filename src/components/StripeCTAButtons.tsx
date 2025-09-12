@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import styles from "./StripeCTAButtons.module.css";
 
 type Option = { label: string; sub?: string; priceId: string };
 
@@ -50,27 +49,31 @@ export default function StripeCTAButtons() {
   }
 
   return (
-    <div className={styles.wrapper + " relative z-10 mx-auto max-w-3xl"}>
-      <ul className={styles.list}>
+    <div className="relative z-10 mx-auto max-w-3xl isolate">
+      {/* Force 1 item per row with reliable spacing */}
+      <ul className="grid grid-cols-1 gap-y-6">
         {options.map((opt) => (
-          <li key={opt.label} className={styles.item}>
+          <li key={opt.label} className="flex flex-col items-stretch">
             <button
               onClick={() => startCheckout(opt.priceId)}
               disabled={!opt.priceId || busy === opt.priceId}
-              className={styles.btn + " select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60"}
+              className="block w-full select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 transition disabled:opacity-60
+                         leading-normal min-h-[44px]"
             >
               {busy === opt.priceId ? "Loading..." : opt.label}
             </button>
             {opt.sub ? (
-              <p className={styles.sub + " text-slate-600"}>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 clear-both">
                 {opt.sub}
               </p>
             ) : null}
           </li>
         ))}
       </ul>
-      <p className={styles.note + " text-slate-500"}>
-        Test cards only  Powered by Stripe Checkout
+
+      <p className="mt-6 text-center text-xs text-slate-500 leading-relaxed">
+        Test cards only — Powered by Stripe Checkout
       </p>
     </div>
   );

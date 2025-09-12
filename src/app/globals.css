@@ -4,3 +4,11 @@
 html, body { margin: 0; padding: 0; }
 
 
+/* === CareCircle CTA anti-overlap (safe global) === */
+@layer components {
+  .cc-cta { isolation: isolate; }
+  .cc-cta ul { display: grid; grid-template-columns: 1fr; row-gap: 1.5rem; }
+  .cc-cta li { display: flex; flex-direction: column; align-items: stretch; }
+  .cc-cta button { display: block; width: 100%; line-height: 1.25rem; white-space: normal; word-break: break-word; }
+  .cc-cta p { margin-top: 0.75rem; line-height: 1.625; }
+}

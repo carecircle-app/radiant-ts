@@ -25,7 +25,6 @@ type IconT = ComponentType<SVGProps<SVGSVGElement>>;
 /* ---------- Presentational cards ---------- */
 function FeatureCard({ title, body, Icon }: { title: string; body: string; Icon: IconT }) {
   return (
-<div className="mt-6 p-4 rounded-xl bg-lime-500 text-black font-bold text-center">Tailwind v4 is ACTIVE</div>
     <div className="rounded-2xl border border-gray-200/70 bg-white/70 p-5 shadow-sm">
       <div className="flex items-start gap-3">
         <span className="inline-flex items-center justify-center rounded-xl border bg-white p-2">
@@ -52,7 +51,6 @@ function StepCard({
   Icon: IconT;
 }) {
   return (
-<div className="mt-6 p-4 rounded-xl bg-lime-500 text-black font-bold text-center">Tailwind v4 is ACTIVE</div>
     <div className="rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm">
       <div className="flex items-center gap-3">
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white font-semibold text-indigo-700">
@@ -68,7 +66,6 @@ function StepCard({
 
 export default function HomePage() {
   return (
-<div className="mt-6 p-4 rounded-xl bg-lime-500 text-black font-bold text-center">Tailwind v4 is ACTIVE</div>
     <main className="min-h-screen bg-neutral-50">
       {/* === TOP MINI-CTA BAR (indigo = trustworthy primary) === */}
       <section aria-label="Quick sign-up" className="bg-white/80">
@@ -212,5 +209,6 @@ export default function HomePage() {
     </main>
   );
 }
+
 
 

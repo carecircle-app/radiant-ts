@@ -52,29 +52,32 @@ export default function StripeCTAButtons() {
   }
 
   return (
-    <div className="relative z-10 mx-auto max-w-3xl">
-      <ul className="space-y-6">
+    <div className="cc-cta relative z-10 mx-auto max-w-3xl isolate">
+      {/* Single-column grid ensures no side-by-side collision */}
+      <ul className="grid grid-cols-1 gap-y-6">
         {options.map((opt) => (
-          <li key={opt.label} className="relative">
+          <li key={opt.label} className="flex flex-col items-stretch">
             <button
               onClick={() => startCheckout(opt.priceId)}
               disabled={!opt.priceId || busy === opt.priceId}
-              className="block w-full sm:w-auto select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md 
-                         transition disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-offset-2
-                         inline-flex items-center justify-center"
+              className="w-full select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md
+                         focus:outline-none focus:ring-2 focus:ring-offset-2 transition
+                         disabled:opacity-60 break-words whitespace-normal leading-normal block"
+              style={{ lineHeight: "1.25rem" }} /* extra guard for odd global CSS */
             >
               {busy === opt.priceId ? "Loading..." : opt.label}
             </button>
             {opt.sub ? (
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              <p className="mt-3 text-sm leading-relaxed text-slate-600 break-words whitespace-normal">
                 {opt.sub}
               </p>
             ) : null}
           </li>
         ))}
       </ul>
-      <p className="mt-6 text-center text-xs text-slate-500">
-        Test cards only — Powered by Stripe Checkout
+
+      <p className="mt-6 text-center text-xs text-slate-500 leading-relaxed">
+        Test cards only  Powered by Stripe Checkout
       </p>
     </div>
   );

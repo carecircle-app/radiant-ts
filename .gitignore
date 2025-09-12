@@ -36,3 +36,5 @@ vbank/
 tsconfig.tsbuildinfo
 tsconfig.tsbuildinfo
 .env*.local
+
+.vercel

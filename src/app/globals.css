@@ -1,3 +1,7 @@
-﻿/* minimal global styles */
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* minimal global styles */
 :root { color-scheme: light; }
 html, body { margin: 0; padding: 0; }
+

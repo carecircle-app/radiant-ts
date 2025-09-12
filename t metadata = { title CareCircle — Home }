@@ -1,0 +1,11 @@
+[33m4f01d2e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature-foundation[m[33m, [m[1;31morigin/feature-foundation[m[33m)[m Fix: restore PostCSS plugin + remove debug banner
+[33m680c379[m Tailwind v4 sanity: single PostCSS config + visible banner
+[33mc24a431[m Restore original 3-CTA landing; colored Stripe buttons + foundation notes; ensure Tailwind scans components
+[33m5e3cafd[m Home: restore original 3-CTA landing (from 6bb9e2e) on feature-foundation
+[33ma2d5a96[m[33m ([m[1;31morigin/6bb9e2e[m[33m)[m Home: colored hero + test Stripe price IDs
+[33m6f2de25[m Homepage: restore real landing content at /
+[33m2386624[m App Router: real home page (no redirect)
+[33m4afab76[m Homepage: real content (no redirect)
+[33mc1df542[m force-200 root route test (diagnose 307)
+[33m8f3d11e[m creen flex flex-col bg-neutral-50">       <header className="bg-gradient-to-br from-blue-100 via-green-100       to-purple-200">               <Container> 	                <div className="mx-auto max-w-3xl py-20 			text-center"> 			            <h1 className="text-3xl sm:text-5xl 				    font-extrabold text-gray-900"> 				                  Calm, coordinated care 						  for your family 						              </h1> 							                  <p 									  className="mt-4 									  text-gray-700"> 									                Share 											tasks, 											updates, 											and 											support 											in 											one 											private 											space. 											            </p> 												                <div 														className="mt-8 														flex 														justify-center"> 														              <StripeCTAButtons 															      /> 															                  </div> 																	            </div> 																		            </Container> 																			          </header>
+[33m61dc8b8[m feat: foundation section + pages; keep root 200

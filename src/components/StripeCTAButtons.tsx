@@ -1,6 +1,6 @@
 "use client";
-
 import { useState } from "react";
+import styles from "./StripeCTAButtons.module.css";
 
 type Option = { label: string; sub?: string; priceId: string };
 
@@ -40,9 +40,7 @@ export default function StripeCTAButtons() {
         body: JSON.stringify({ priceId })
       });
       const data = await res.json();
-      if (data?.url) {
-        window.location.href = data.url as string;
-      }
+      if (data?.url) window.location.href = data.url as string;
     } catch (err) {
       console.error("Checkout error", err);
       alert("Could not start checkout. Please try again.");
@@ -52,31 +50,26 @@ export default function StripeCTAButtons() {
   }
 
   return (
-    <div className="cc-cta relative z-10 mx-auto max-w-3xl isolate">
-      {/* Single-column grid ensures no side-by-side collision */}
-      <ul className="grid grid-cols-1 gap-y-6">
+    <div className={styles.wrapper + " relative z-10 mx-auto max-w-3xl"}>
+      <ul className={styles.list}>
         {options.map((opt) => (
-          <li key={opt.label} className="flex flex-col items-stretch">
+          <li key={opt.label} className={styles.item}>
             <button
               onClick={() => startCheckout(opt.priceId)}
               disabled={!opt.priceId || busy === opt.priceId}
-              className="w-full select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md
-                         focus:outline-none focus:ring-2 focus:ring-offset-2 transition
-                         disabled:opacity-60 break-words whitespace-normal leading-normal block"
-              style={{ lineHeight: "1.25rem" }} /* extra guard for odd global CSS */
+              className={styles.btn + " select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60"}
             >
               {busy === opt.priceId ? "Loading..." : opt.label}
             </button>
             {opt.sub ? (
-              <p className="mt-3 text-sm leading-relaxed text-slate-600 break-words whitespace-normal">
+              <p className={styles.sub + " text-slate-600"}>
                 {opt.sub}
               </p>
             ) : null}
           </li>
         ))}
       </ul>
-
-      <p className="mt-6 text-center text-xs text-slate-500 leading-relaxed">
+      <p className={styles.note + " text-slate-500"}>
         Test cards only  Powered by Stripe Checkout
       </p>
     </div>

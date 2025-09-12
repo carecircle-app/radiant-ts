@@ -1,0 +1,6 @@
+.wrapper { isolation: isolate; }
+.list { display: grid; grid-template-columns: 1fr; row-gap: 1.5rem; }
+.item { display: flex; flex-direction: column; align-items: stretch; }
+.btn { display: block; width: 100%; line-height: 1.25rem; white-space: normal; word-break: break-word; }
+.sub { margin-top: 0.75rem; line-height: 1.625; }
+.note { margin-top: 1.5rem; text-align: center; font-size: 0.75rem; }

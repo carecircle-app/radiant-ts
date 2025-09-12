@@ -30,7 +30,7 @@ export default function StripeCTAButtons() {
           CareCircle Lite  $4.99/mo
         </a>
         <p className="mt-1 -mb-1 text-center text-xs text-slate-500">
-          50/month from <span className="font-medium">Lite</span> supports CareCircle Global Foundation.
+          50¢/month from <span className="font-medium">Lite</span> supports CareCircle Global Foundation.
         </p>
 
         {/* Elite */}
@@ -39,7 +39,7 @@ export default function StripeCTAButtons() {
           aria-label="Subscribe to CareCircle Elite for $9.99 per month"
           className="block w-full rounded-full bg-green-600 hover:bg-green-700 text-white py-3 text-sm sm:text-base font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
         >
-          CareCircle Elite — $9.99/mo
+          CareCircle Elite  $9.99/mo
         </a>
         <p className="mt-1 -mb-1 text-center text-xs text-slate-500">
           $1/month from <span className="font-medium">Elite</span> supports CareCircle Global Foundation.

@@ -1,7 +1,7 @@
 ﻿/**
  * Colored Stripe CTAs + Foundation notes
- * - Uses NEXT_PUBLIC_* price IDs if present; falls back to test IDs in Preview.
- * - Server component (no "use client").
+ * Server component (no "use client").
+ * Uses NEXT_PUBLIC_* price IDs when available; falls back to test IDs in Preview.
  */
 export default function StripeCTAButtons() {
   const lite =
@@ -20,23 +20,20 @@ export default function StripeCTAButtons() {
   return (
     <div className="mx-auto max-w-lg">
       <div className="space-y-3">
-
         {/* Lite */}
         <a
           href={`/api/stripe/checkout?priceId=${lite}`}
-          aria-label="Subscribe to CareCircle Lite for $4.99 per month"
           className="block w-full rounded-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-sm sm:text-base font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
           CareCircle Lite  $4.99/mo
         </a>
         <p className="mt-1 -mb-1 text-center text-xs text-slate-500">
-          50¢/month from <span className="font-medium">Lite</span> supports CareCircle Global Foundation.
+          50/month from <span className="font-medium">Lite</span> supports CareCircle Global Foundation.
         </p>
 
         {/* Elite */}
         <a
           href={`/api/stripe/checkout?priceId=${elite}`}
-          aria-label="Subscribe to CareCircle Elite for $9.99 per month"
           className="block w-full rounded-full bg-green-600 hover:bg-green-700 text-white py-3 text-sm sm:text-base font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
         >
           CareCircle Elite  $9.99/mo
@@ -48,7 +45,6 @@ export default function StripeCTAButtons() {
         {/* Donate Once */}
         <a
           href={`/api/stripe/checkout?priceId=${donateOnce}`}
-          aria-label="Donate once to CareCircle"
           className="block w-full rounded-full bg-violet-600 hover:bg-violet-700 text-white py-3 text-sm sm:text-base font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
         >
           Donate Once
@@ -60,7 +56,6 @@ export default function StripeCTAButtons() {
         {/* Donate Monthly */}
         <a
           href={`/api/stripe/checkout?priceId=${donateMonthly}`}
-          aria-label="Donate monthly to CareCircle"
           className="block w-full rounded-full bg-rose-600 hover:bg-rose-700 text-white py-3 text-sm sm:text-base font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
         >
           Donate Monthly
@@ -68,7 +63,6 @@ export default function StripeCTAButtons() {
         <p className="mt-1 text-center text-xs text-slate-500">
           100% of monthly donations support CareCircle Global Foundation.
         </p>
-
       </div>
     </div>
   );

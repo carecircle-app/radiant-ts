@@ -32,63 +32,55 @@ export default function StripeCTAButtons() {
     }
   }
 
+  // Shared inline styles (inline ensures we override any legacy global styles)
+  const pill: React.CSSProperties = {
+    display: "block",
+    width: "100%",
+    minHeight: 44,
+    lineHeight: "1.25rem",
+    whiteSpace: "normal",
+    wordBreak: "break-word",
+    boxSizing: "border-box",
+    position: "relative",
+
+    // Visuals to match your screenshot:
+    backgroundColor: "#ffffff",
+    color: "#111827",                 // slate-900
+    borderRadius: 9999,               // rounded-full
+    border: "1px solid rgba(0,0,0,0.06)",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
+  };
+
+  const caption: React.CSSProperties = {
+    marginTop: 8,
+    lineHeight: 1.625,
+    color: "#64748b",                 // slate-500/600
+    display: "block",
+    position: "relative",
+    clear: "both"
+  };
+
   return (
-    <div
-      className="relative z-10 mx-auto max-w-3xl"
-      style={{ isolation: "isolate" }}
-    >
-      {/* Hard single-column grid (divs, not UL/LI) */}
+    <div className="relative z-10 mx-auto max-w-3xl" style={{ isolation: "isolate" }}>
+      {/* hard single-column list */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr", rowGap: "24px" }}>
         {options.map((opt) => (
-          <div
-            key={opt.label}
-            style={{ display: "flex", flexDirection: "column", alignItems: "stretch", minWidth: 0 }}
-          >
+          <div key={opt.label} style={{ display: "flex", flexDirection: "column", alignItems: "stretch" }}>
             <button
               onClick={() => startCheckout(opt.priceId)}
               disabled={!opt.priceId || busy === opt.priceId}
-              className="select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60"
-              style={{
-                display: "block",
-                width: "100%",
-                minHeight: 44,
-                lineHeight: "1.25rem",
-                whiteSpace: "normal",
-                wordBreak: "break-word",
-                boxSizing: "border-box",
-                float: "none",
-                clear: "none",
-                position: "relative",
-                zIndex: 1
-              }}
+              className="select-none px-6 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60"
+              style={pill}
             >
               {busy === opt.priceId ? "Loading..." : opt.label}
             </button>
-            {opt.sub ? (
-              <div
-                className="text-sm text-slate-600"
-                style={{
-                  marginTop: 8,
-                  lineHeight: 1.625,
-                  display: "block",
-                  float: "none",
-                  clear: "both",
-                  position: "relative",
-                  zIndex: 1
-                }}
-              >
-                {opt.sub}
-              </div>
-            ) : null}
+            {opt.sub ? <div style={caption}>{opt.sub}</div> : null}
           </div>
         ))}
       </div>
 
-      <div
-        className="mt-6 text-center text-xs text-slate-500"
-        style={{ lineHeight: 1.4 }}
-      >
-        Test cards only — Powered by Stripe Checkout
+      <div className="mt-6 text-center text-xs" style={{ color: "#64748b", lineHeight: 1.4 }}>
+        Test cards only  Powered by Stripe Checkout
       </div>
     </div>
   );

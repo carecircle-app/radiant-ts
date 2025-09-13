@@ -1,23 +1,34 @@
-﻿import Link from "next/link";
-import { Container } from "@/components/container";
+import StripeCTAButtons from "@/components/StripeCTAButtons";
 
 export const metadata = {
-  title: "Pricing  CareCircle",
-  description: "Pricing page",
+  title: "CareCircle — Pricing",
+  description: "Choose a plan that fits your family."
 };
 
-export default function Page() {
+//------------------
+export default function Pricing() {
   return (
-    <Container>
-      <div className="py-12">
-        <h1 className="text-3xl font-bold">Pricing</h1>
-        <div className="mt-4 text-gray-600 space-y-4">
-          <p>Choose the plan that fits. You can switch or cancel anytime.</p>
+    <main className="min-h-screen mx-auto max-w-4xl px-6 py-16">
+      <h1 className="text-3 font-semibold text-center">Choose your plan</h1>
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="rounded-2l border p6">
+          <h2 className="text-xl font-semibold">Lite</h2>
+          <ul className="mt-3 text-sm list-disc pl-5 space-y-1">
+            <li>Shared calendar</li>
+            <li>Medication reminders</li>
+            <li>Basic alerts</li>
+          </ul>
         </div>
-        <div className="mt-8">
-          <Link href="/" className="text-blue-700 underline"> Back home</Link>
+        <div className="rounded-2l border p6">
+          <h2 className="text-xl font-semibold">Elite</h2>
+          <ul className="mt-3 text-sm list-disc pl-5 space-y-1">
+            <li>Everything in Lite</li>
+            <li>Geofencing & SOS</li>
+            <li>Secure chat</li>
+          </ul>
         </div>
       </div>
-    </Container>
+      <StripeCTAButtons className="mt-10 flex justify-center gap-3" />
+    </main>
   );
 }

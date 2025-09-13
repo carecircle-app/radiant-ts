@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Gradient } from "@/components/gradient";
 import { LinkedAvatars } from "@/components/linked-avatars";
 import { LogoCloud } from "@/components/logo-cloud";
 import StripeCTAButtons from "@/components/StripeCTAButtons";
 
 export const metadata: Metadata = {
-  title: "CareCircle — Coordinate care with confidence",
+  title: "CareCircle â€” Coordinate care with confidence",
   description:
     "CareCircle helps families and caregivers coordinate daily care with a shared calendar, medication reminders, geofencing alerts, geofencing, and secure messaging."
 };
@@ -23,11 +23,11 @@ export default function Home() {
             Coordinate care with confidence
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
-            Shared calendar, caregiver scheduling, medication reminders, geofencing alerts, and secure messaging—built for families and caregivers.
+            Shared calendar, caregiver scheduling, medication reminders, geofencing alerts, and secure messagingâ€”built for families and caregivers.
           </p>
 
           <div className="mt-6 flex justify-center">
-            <LinkedAvatars className="opacity-90" />
+            <div className="opacity-90"><LinkedAvatars /></div>
           </div>
 
           {/* NEW COLORED TWO-LINE CTA BUTTONS */}
@@ -74,7 +74,7 @@ export default function Home() {
             />
             <FeatureCard
               title="Activity history"
-              desc="A clean trail of what happened and when—no guesswork."
+              desc="A clean trail of what happened and whenâ€”no guesswork."
             />
           </div>
         </div>
@@ -99,3 +99,4 @@ function FeatureCard({ title, desc }: { title: string; desc: string }) {
     </div>
   );
 }
+

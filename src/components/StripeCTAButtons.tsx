@@ -1,90 +1,52 @@
 "use client";
 import { useState } from "react";
 
-type Option = { label: string; sub: string; priceId: string; bg: string };
+// Read price IDs at build-time from env (client-safe NEXT_PUBLIC_* vars)
+const PRICE_LITE  = process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE || "";
+const PRICE_ELITE = process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE || "";
 
-const options: Option[] = [
-  {
-    label: "CareCircle Lite $4.99/mo",
-    sub: "50 cents/month supports CareCircle Global Foundation",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE ?? "",
-    bg: "bg-blue-500"
-  },
-  {
-    label: "CareCircle Elite $9.99/mo",
-    sub: "$1/month supports CareCircle Global Foundation",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE ?? "",
-    bg: "bg-green-500"
-  },
-  {
-    label: "Donate Once",
-    sub: "100% supports CareCircle Global Foundation",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_ONCE ?? "",
-    bg: "bg-purple-500"
-  },
-  {
-    label: "Donate Monthly",
-    sub: "100% supports CareCircle Global Foundation",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_MONTHLY ?? "",
-    bg: "bg-rose-500"
-  }
-];
+async function startCheckout(priceId: string) {
+  const res = await fetch("/api/stripe/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ priceId })
+  });
+  if (!res.ok) throw new Error("Checkout failed: " + res.status);
+  const data: { url?: string; error?: string } = await res.json();
+  if (!data?.url) throw new Error(data?.error || "No URL from checkout");
+  window.location.href = data.url;
+}
 
-export default function StripeCTAButtons() {
-  const [busy, setBusy] = useState<string | null>(null);
+function CtaLink(props: { label: string; priceId: string; busy: boolean; setBusy: (b: boolean)=>void }) {
+  const { label, priceId, busy, setBusy } = props;
+  const href = priceId ? `/api/stripe/checkout?priceId=${priceId}` : "#";
+  return (
+    <a
+      href={href}
+      onClick={async (e) => {
+        if (!priceId) return; // nothing to do
+        e.preventDefault();
+        try { setBusy(true); await startCheckout(priceId); }
+        catch (err) { console.error(err); window.location.href = href; } // GET fallback
+        finally { setBusy(false); }
+      }}
+      aria-disabled={busy}
+      className="inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium hover:underline disabled:opacity-50"
+    >
+      {busy ? "Starting" : label}
+    </a>
+  );
+}
 
-  async function startCheckout(priceId: string) {
-    if (!priceId || busy) return;
-    setBusy(priceId);
-    try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId })
-      });
-      const data = await res.json();
-      if (data?.url) window.location.href = data.url as string;
-    } catch (err) {
-      console.error("Checkout error", err);
-      alert("Could not start checkout. Please try again.");
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  const gridStyle: React.CSSProperties = { display: "grid", gridTemplateColumns: "1fr", rowGap: 24 };
-  const pillStyle: React.CSSProperties = {
-    display: "block", width: "100%", minHeight: 64,
-    lineHeight: 1.25, whiteSpace: "normal", wordBreak: "break-word",
-    boxSizing: "border-box", position: "relative"
-  };
+export default function StripeCTAButtons({ className }: { className?: string }) {
+  const [liteBusy, setLiteBusy] = useState(false);
+  const [eliteBusy, setEliteBusy] = useState(false);
 
   return (
-    <div className="relative z-10 mx-auto max-w-3xl" style={{ isolation: "isolate" }}>
-      <div style={gridStyle}>
-        {options.map((opt) => (
-          <div key={opt.label} className="flex flex-col items-stretch">
-            <button
-              onClick={() => startCheckout(opt.priceId)}
-              disabled={!opt.priceId || busy === opt.priceId}
-              className={`${opt.bg} rounded-full w-full px-6 py-4 text-center shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60`}
-              style={pillStyle}
-              aria-label={`${opt.label}  ${opt.sub}`}
-            >
-              <span className="block text-white font-semibold text-base">
-                {busy === opt.priceId ? "Loading..." : opt.label}
-              </span>
-              <span className="block text-white/90 text-xs mt-1">
-                {opt.sub}
-              </span>
-            </button>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-6 text-center text-xs text-slate-500" style={{ lineHeight: 1.4 }}>
-        Test cards only  Powered by Stripe Checkout
-      </div>
+    <div className={className ?? "mt-8 flex justify-center gap-3"}>
+      <CtaLink label="Start Lite"  priceId={PRICE_LITE}  busy={liteBusy}  setBusy={setLiteBusy} />
+      <CtaLink label="Go Elite"    priceId={PRICE_ELITE} busy={eliteBusy} setBusy={setEliteBusy} />
+      <p className="sr-only">If checkout fails to start, links fall back to GET redirect.</p>
     </div>
   );
 }

@@ -1,43 +1,51 @@
-﻿import { NextResponse } from "next/server";
-import Stripe from "stripe";
+import { NextRequest, NextResponse } from "next/server";
+import { stripe, assertServer } from "@/lib/stripe";
 
-export const dynamic = "force-dynamic"; // ensure server
+const stripeKey = process.env.STRIPE_SECRET_KEY;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+async function createCheckout(priceId: string, req: NextRequest) {
+  assertServer();
+  const origin = req.nextUrl.origin;
+  const success_url = `${origin}/success?session_id={CHECKOUT_SESSION_ID}`;
+  const cancel_url  = `${origin}/cancel`;
 
-// Works on Vercel and locally
-function getOrigin(req: Request) {
-  const xfHost = req.headers.get("x-forwarded-host");
-  if (xfHost) {
-    const proto = req.headers.get("x-forwarded-proto") ?? "https";
-    return `${proto}://${xfHost}`;
-  }
-  return new URL(req.url).origin;
+  const session = await stripe.checkout.sessions.create({
+    mode: "subscription",
+    line_items: [{ price: priceId, quantity: 1 }],
+    success_url,
+    cancel_url,
+    allow_promotion_codes: true,
+  });
+
+  if (!session?.url) throw new Error("Stripe did not return a checkout URL.");
+  return session.url;
 }
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const priceId = searchParams.get("priceId");
-
-  if (!priceId) {
-    return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
-  }
-
-  const origin = getOrigin(req);
-
+export async function POST(req: NextRequest) {
   try {
-    const session = await stripe.checkout.sessions.create({
-      // If you use one-time prices, change to "payment"
-      mode: "subscription",
-      line_items: [{ price: priceId, quantity: 1 }],
-      allow_promotion_codes: true,
-      success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/cancel`,
-    });
+    const { priceId } = await req.json();
+    if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
+    if (!stripeKey) return NextResponse.json({ error: "Missing STRIPE_SECRET_KEY" }, { status: 500 });
 
-    return NextResponse.redirect(session.url!, 303); // important: 303
-  } catch (err: any) {
-    console.error("Stripe error:", err);
-    return NextResponse.json({ error: err?.message ?? "Stripe error" }, { status: 500 });
+    const url = await createCheckout(priceId, req);
+    return NextResponse.json({ url }, { status: 200 });
+  } catch (e: any) {
+    console.error("[checkout POST] error", e);
+    return NextResponse.json({ error: e?.message || "Stripe error" }, { status: 500 });
+  }
+}
+
+// Legacy/query fallback (?priceId=...) used by buttons if POST fails
+export async function GET(req: NextRequest) {
+  try {
+    const priceId = req.nextUrl.searchParams.get("priceId");
+    if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
+    if (!stripeKey) return NextResponse.json({ error: "Missing STRIPE_SECRET_KEY" }, { status: 500 });
+
+    const url = await createCheckout(priceId, req);
+    return NextResponse.redirect(url, { status: 303 });
+  } catch (e: any) {
+    console.error("[checkout GET] error", e);
+    return NextResponse.json({ error: e?.message || "Stripe error" }, { status: 500 });
   }
 }

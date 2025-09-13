@@ -1,13 +1,33 @@
 "use client";
 import { useState } from "react";
 
-type Option = { label: string; sub?: string; priceId: string };
+type Option = { label: string; sub: string; priceId: string; bg: string };
 
 const options: Option[] = [
-  { label: "CareCircle Lite $4.99/mo",  sub: "50/month from Lite supports CareCircle Global Foundation.",   priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE ?? "" },
-  { label: "CareCircle Elite $9.99/mo", sub: "$1/month from Elite supports CareCircle Global Foundation.",    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE ?? "" },
-  { label: "Donate Once",               sub: "100% of one-time donations support CareCircle Global Foundation.", priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_ONCE ?? "" },
-  { label: "Donate Monthly",            sub: "100% of monthly donations support CareCircle Global Foundation.",  priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_MONTHLY ?? "" }
+  {
+    label: "CareCircle Lite  $4.99/mo",
+    sub: "50/month supports CareCircle Global Foundation",
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE ?? "",
+    bg: "bg-blue-600"
+  },
+  {
+    label: "CareCircle Elite  $9.99/mo",
+    sub: "$1/month supports CareCircle Global Foundation",
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE ?? "",
+    bg: "bg-green-600"
+  },
+  {
+    label: "Donate Once",
+    sub: "100% supports CareCircle Global Foundation",
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_ONCE ?? "",
+    bg: "bg-purple-600"
+  },
+  {
+    label: "Donate Monthly",
+    sub: "100% supports CareCircle Global Foundation",
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_MONTHLY ?? "",
+    bg: "bg-rose-600"
+  }
 ];
 
 export default function StripeCTAButtons() {
@@ -32,54 +52,43 @@ export default function StripeCTAButtons() {
     }
   }
 
-  // Shared inline styles (inline ensures we override any legacy global styles)
-  const pill: React.CSSProperties = {
+  // Inline guards to prevent overlap regardless of global styles
+  const gridStyle: React.CSSProperties = { display: "grid", gridTemplateColumns: "1fr", rowGap: 24 };
+  const pillStyle: React.CSSProperties = {
     display: "block",
     width: "100%",
-    minHeight: 44,
-    lineHeight: "1.25rem",
+    boxSizing: "border-box",
+    minHeight: 64,               // taller to fit two lines
+    lineHeight: 1.25,
     whiteSpace: "normal",
     wordBreak: "break-word",
-    boxSizing: "border-box",
-    position: "relative",
-
-    // Visuals to match your screenshot:
-    backgroundColor: "#ffffff",
-    color: "#111827",                 // slate-900
-    borderRadius: 9999,               // rounded-full
-    border: "1px solid rgba(0,0,0,0.06)",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
-  };
-
-  const caption: React.CSSProperties = {
-    marginTop: 8,
-    lineHeight: 1.625,
-    color: "#64748b",                 // slate-500/600
-    display: "block",
-    position: "relative",
-    clear: "both"
+    position: "relative"
   };
 
   return (
     <div className="relative z-10 mx-auto max-w-3xl" style={{ isolation: "isolate" }}>
-      {/* hard single-column list */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", rowGap: "24px" }}>
+      <div style={gridStyle}>
         {options.map((opt) => (
-          <div key={opt.label} style={{ display: "flex", flexDirection: "column", alignItems: "stretch" }}>
+          <div key={opt.label} className="flex flex-col items-stretch">
             <button
               onClick={() => startCheckout(opt.priceId)}
               disabled={!opt.priceId || busy === opt.priceId}
-              className="select-none px-6 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60"
-              style={pill}
+              className={`${opt.bg} rounded-full w-full px-6 py-4 text-center shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60`}
+              style={pillStyle}
+              aria-label={`${opt.label}  ${opt.sub}`}
             >
-              {busy === opt.priceId ? "Loading..." : opt.label}
+              <span className="block text-white font-semibold text-sm sm:text-base">
+                {busy === opt.priceId ? "Loading..." : opt.label}
+              </span>
+              <span className="block text-white/90 text-xs mt-1">
+                {opt.sub}
+              </span>
             </button>
-            {opt.sub ? <div style={caption}>{opt.sub}</div> : null}
           </div>
         ))}
       </div>
 
-      <div className="mt-6 text-center text-xs" style={{ color: "#64748b", lineHeight: 1.4 }}>
+      <div className="mt-6 text-center text-xs text-slate-500" style={{ lineHeight: 1.4 }}>
         Test cards only  Powered by Stripe Checkout
       </div>
     </div>

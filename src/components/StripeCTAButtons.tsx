@@ -4,26 +4,10 @@ import { useState } from "react";
 type Option = { label: string; sub?: string; priceId: string };
 
 const options: Option[] = [
-  {
-    label: "CareCircle Lite $4.99/mo",
-    sub: "50/month from Lite supports CareCircle Global Foundation.",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE ?? ""
-  },
-  {
-    label: "CareCircle Elite $9.99/mo",
-    sub: "$1/month from Elite supports CareCircle Global Foundation.",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE ?? ""
-  },
-  {
-    label: "Donate Once",
-    sub: "100% of one-time donations support CareCircle Global Foundation.",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_ONCE ?? ""
-  },
-  {
-    label: "Donate Monthly",
-    sub: "100% of monthly donations support CareCircle Global Foundation.",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_MONTHLY ?? ""
-  }
+  { label: "CareCircle Lite $4.99/mo",  sub: "50/month from Lite supports CareCircle Global Foundation.",   priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE ?? "" },
+  { label: "CareCircle Elite $9.99/mo", sub: "$1/month from Elite supports CareCircle Global Foundation.",    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE ?? "" },
+  { label: "Donate Once",               sub: "100% of one-time donations support CareCircle Global Foundation.", priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_ONCE ?? "" },
+  { label: "Donate Monthly",            sub: "100% of monthly donations support CareCircle Global Foundation.",  priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_MONTHLY ?? "" }
 ];
 
 export default function StripeCTAButtons() {
@@ -49,32 +33,63 @@ export default function StripeCTAButtons() {
   }
 
   return (
-    <div className="relative z-10 mx-auto max-w-3xl isolate">
-      {/* Force 1 item per row with reliable spacing */}
-      <ul className="grid grid-cols-1 gap-y-6">
+    <div
+      className="relative z-10 mx-auto max-w-3xl"
+      style={{ isolation: "isolate" }}
+    >
+      {/* Hard single-column grid (divs, not UL/LI) */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", rowGap: "24px" }}>
         {options.map((opt) => (
-          <li key={opt.label} className="flex flex-col items-stretch">
+          <div
+            key={opt.label}
+            style={{ display: "flex", flexDirection: "column", alignItems: "stretch", minWidth: 0 }}
+          >
             <button
               onClick={() => startCheckout(opt.priceId)}
               disabled={!opt.priceId || busy === opt.priceId}
-              className="block w-full select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md
-                         focus:outline-none focus:ring-2 focus:ring-offset-2 transition disabled:opacity-60
-                         leading-normal min-h-[44px]"
+              className="select-none rounded-full px-6 py-3 text-sm font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60"
+              style={{
+                display: "block",
+                width: "100%",
+                minHeight: 44,
+                lineHeight: "1.25rem",
+                whiteSpace: "normal",
+                wordBreak: "break-word",
+                boxSizing: "border-box",
+                float: "none",
+                clear: "none",
+                position: "relative",
+                zIndex: 1
+              }}
             >
               {busy === opt.priceId ? "Loading..." : opt.label}
             </button>
             {opt.sub ? (
-              <p className="mt-2 text-sm leading-relaxed text-slate-600 clear-both">
+              <div
+                className="text-sm text-slate-600"
+                style={{
+                  marginTop: 8,
+                  lineHeight: 1.625,
+                  display: "block",
+                  float: "none",
+                  clear: "both",
+                  position: "relative",
+                  zIndex: 1
+                }}
+              >
                 {opt.sub}
-              </p>
+              </div>
             ) : null}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <p className="mt-6 text-center text-xs text-slate-500 leading-relaxed">
+      <div
+        className="mt-6 text-center text-xs text-slate-500"
+        style={{ lineHeight: 1.4 }}
+      >
         Test cards only — Powered by Stripe Checkout
-      </p>
+      </div>
     </div>
   );
 }

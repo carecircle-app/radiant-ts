@@ -5,28 +5,28 @@ type Option = { label: string; sub: string; priceId: string; bg: string };
 
 const options: Option[] = [
   {
-    label: "CareCircle Lite  $4.99/mo",
-    sub: "50/month supports CareCircle Global Foundation",
+    label: "CareCircle Lite $4.99/mo",
+    sub: "50 cents/month supports CareCircle Global Foundation",
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE ?? "",
-    bg: "bg-blue-600"
+    bg: "bg-blue-500"
   },
   {
-    label: "CareCircle Elite  $9.99/mo",
+    label: "CareCircle Elite $9.99/mo",
     sub: "$1/month supports CareCircle Global Foundation",
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ELITE ?? "",
-    bg: "bg-green-600"
+    bg: "bg-green-500"
   },
   {
     label: "Donate Once",
     sub: "100% supports CareCircle Global Foundation",
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_ONCE ?? "",
-    bg: "bg-purple-600"
+    bg: "bg-purple-500"
   },
   {
     label: "Donate Monthly",
     sub: "100% supports CareCircle Global Foundation",
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_DONATE_MONTHLY ?? "",
-    bg: "bg-rose-600"
+    bg: "bg-rose-500"
   }
 ];
 
@@ -52,17 +52,11 @@ export default function StripeCTAButtons() {
     }
   }
 
-  // Inline guards to prevent overlap regardless of global styles
   const gridStyle: React.CSSProperties = { display: "grid", gridTemplateColumns: "1fr", rowGap: 24 };
   const pillStyle: React.CSSProperties = {
-    display: "block",
-    width: "100%",
-    boxSizing: "border-box",
-    minHeight: 64,               // taller to fit two lines
-    lineHeight: 1.25,
-    whiteSpace: "normal",
-    wordBreak: "break-word",
-    position: "relative"
+    display: "block", width: "100%", minHeight: 64,
+    lineHeight: 1.25, whiteSpace: "normal", wordBreak: "break-word",
+    boxSizing: "border-box", position: "relative"
   };
 
   return (
@@ -77,7 +71,7 @@ export default function StripeCTAButtons() {
               style={pillStyle}
               aria-label={`${opt.label}  ${opt.sub}`}
             >
-              <span className="block text-white font-semibold text-sm sm:text-base">
+              <span className="block text-white font-semibold text-base">
                 {busy === opt.priceId ? "Loading..." : opt.label}
               </span>
               <span className="block text-white/90 text-xs mt-1">

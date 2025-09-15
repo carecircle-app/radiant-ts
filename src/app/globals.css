@@ -1,14 +1,38 @@
-﻿@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root { color-scheme: light; }
-html, body { margin: 0; padding: 0; }
-
-
-/* === CareCircle CTA anti-overlap (safe global) === */
-@layer components {
-  .cc-cta { isolation: isolate; }
-  .cc-cta ul { display: grid; grid-template-columns: 1fr; row-gap: 1.5rem; }
-  .cc-cta li { display: flex; flex-direction: column; align-items: stretch; }
-  .cc-cta button { display: block; width: 100%; line-height: 1.25rem; white-space: normal; word-break: break-word; }
-  .cc-cta p { margin-top: 0.75rem; line-height: 1.625; }
+/* ---- Mobile-safe globals (for phones / notches) ---- */
+:root {
+  /* iOS notch & Android cutouts */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/* Reusable utilities for safe-area paddings */
+@layer utilities {
+  .pt-safe { padding-top: var(--safe-top); }
+  .pb-safe { padding-bottom: var(--safe-bottom); }
+  .py-safe { padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
+
+  /* Minimum touch target (44x44) helper */
+  .tap-44 { min-height: 44px; min-width: 44px; }
+
+  /* Prevent horizontal scroll on small screens */
+  .no-x-scroll { overflow-x: hidden; }
+}
+
+/* ---- Your small design tokens / components ---- */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-medium transition
+           focus-visible:outline-none focus-visible:ring-2 ring-offset-2 ring-accent-300 active:scale-[.98];
+  }
+  .btn-primary { @apply bg-brand-600 text-white hover:bg-brand-700; }
+  .btn-ghost   { @apply border border-slate-300 text-slate-800 hover:bg-slate-50; }
+
+  .card { @apply rounded-2xl border border-slate-200 p-6 bg-white shadow; }
+}
+
+/* Optional: make media scale nicely on phones */
+img, video, canvas { max-width: 100%; height: auto; display: block; }

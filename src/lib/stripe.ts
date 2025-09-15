@@ -1,11 +1,10 @@
 import "server-only";
 import Stripe from "stripe";
 
-const apiVersion: Stripe.LatestApiVersion = "2025-08-27.basil";
-
 const key = process.env.STRIPE_SECRET_KEY ?? "";
+
 export const stripe = new Stripe(key, {
-  apiVersion,
+  // omit apiVersion to use the SDK's default (avoids type mismatch on updates)
   appInfo: { name: "CareCircle" },
 });
 

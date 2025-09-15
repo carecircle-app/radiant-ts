@@ -1,4 +1,4 @@
-﻿export default function Page() {
+export default function Page() {
   return (
     <main className="min-h-screen grid place-items-center p-10">
       <div className="p-8 rounded-2xl bg-lime-300 text-black shadow">

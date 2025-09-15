@@ -1,4 +1,4 @@
-﻿/** DonationSection  static, server component (no redirects, no fetch) */
+/** DonationSection  static, server component (no redirects, no fetch) */
 export default function DonationSection() {
   const stats = [
     { label: "Lunches served", value: "2,340" },

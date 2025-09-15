@@ -11,6 +11,7 @@
 import express, { type Request, type Response, type NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import { receiptsRouter } from './receipts';
 
 const VERSION = "CareCircle Phase-1 (Calendar+Tasks)";
 const PORT = Number(process.env.PORT ?? 4000);

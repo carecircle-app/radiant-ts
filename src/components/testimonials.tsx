@@ -1,4 +1,4 @@
-﻿type Quote = { body: string; author: string };
+type Quote = { body: string; author: string };
 
 const QUOTES: Quote[] = [
   { body: "CareCircle keeps everyone aligned without the chaos.", author: "A. Rivera" },

@@ -1,4 +1,4 @@
-﻿export const SUPPORTED_CURRENCIES = ["usd"] as const;
+export const SUPPORTED_CURRENCIES = ["usd"] as const;
 export type Currency = (typeof SUPPORTED_CURRENCIES)[number];
 export type PlanKey = "lite" | "elite" | "donation" | "donationMonthly";
 const PRICE_ENV: Record<PlanKey, string | undefined> = {

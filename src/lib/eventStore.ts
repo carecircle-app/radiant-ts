@@ -6,7 +6,7 @@ import path from "path";
  * Simple durable event store for dev/small scale.
  * Writes JSONL rows: "<id>\t<type>\t<ts>\n" into ./.data/stripe_events.jsonl
  *
- * We’ll later swap this to Postgres with the same API (seenOncePersist).
+ * Weâ€™ll later swap this to Postgres with the same API (seenOncePersist).
  */
 
 const DATA_DIR = path.resolve(process.cwd(), ".data");

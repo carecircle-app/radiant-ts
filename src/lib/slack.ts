@@ -4,7 +4,7 @@
 /**
  * Lightweight Slack webhook helper.
  * - Uses global fetch (no deps)
- * - Soft-fails if SLACK_WEBHOOK_URL is missing (won’t crash dev)
+ * - Soft-fails if SLACK_WEBHOOK_URL is missing (wonâ€™t crash dev)
  * - Exposes: sendSlack(), slackPaymentSucceeded(), slackInvoiceFailed(), slackSubscriptionChanged()
  */
 
@@ -24,7 +24,7 @@ export type SlackResult =
 /** Low-level sender */
 export async function sendSlack(payload: SlackPayload): Promise<SlackResult> {
   if (!WEBHOOK) {
-    console.warn("[slack] Skipped — SLACK_WEBHOOK_URL not set.");
+    console.warn("[slack] Skipped â€” SLACK_WEBHOOK_URL not set.");
     return { skipped: true };
   }
   try {
@@ -48,7 +48,7 @@ export async function sendSlack(payload: SlackPayload): Promise<SlackResult> {
 /* ---------------- Formatting helpers ---------------- */
 
 function money(amount?: number | null, currency?: string | null): string {
-  if (amount == null || !currency) return "—";
+  if (amount == null || !currency) return "â€”";
   try {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -60,7 +60,7 @@ function money(amount?: number | null, currency?: string | null): string {
   }
 }
 
-/** ✅ Payment succeeded */
+/** âœ… Payment succeeded */
 export function slackPaymentSucceeded(p: {
   amount: number;
   currency: string;
@@ -70,23 +70,23 @@ export function slackPaymentSucceeded(p: {
 }): SlackPayload {
   const amt = money(p.amount, p.currency);
   return {
-    text: `✅ Payment succeeded — ${amt}`,
+    text: `âœ… Payment succeeded â€” ${amt}`,
     blocks: [
-      { type: "header", text: { type: "plain_text", text: "✅ Payment Succeeded" } },
+      { type: "header", text: { type: "plain_text", text: "âœ… Payment Succeeded" } },
       {
         type: "section",
         fields: [
           { type: "mrkdwn", text: `*Amount:*\n${amt}` },
           { type: "mrkdwn", text: `*PI:*\n${p.piId}` },
-          { type: "mrkdwn", text: `*Customer:*\n${p.customer ?? "—"}` },
-          { type: "mrkdwn", text: `*Email:*\n${p.email ?? "—"}` },
+          { type: "mrkdwn", text: `*Customer:*\n${p.customer ?? "â€”"}` },
+          { type: "mrkdwn", text: `*Email:*\n${p.email ?? "â€”"}` },
         ],
       },
     ],
   };
 }
 
-/** ⚠️ Invoice payment failed */
+/** âš ï¸ Invoice payment failed */
 export function slackInvoiceFailed(p: {
   invoiceId: string;
   amountDue?: number | null;
@@ -102,7 +102,7 @@ export function slackInvoiceFailed(p: {
           elements: [
             {
               type: "button",
-              text: { type: "plain_text", text: "Open invoice ↗" },
+              text: { type: "plain_text", text: "Open invoice â†—" },
               url: p.hostedInvoiceUrl,
             },
           ],
@@ -111,14 +111,14 @@ export function slackInvoiceFailed(p: {
     : [];
 
   return {
-    text: `⚠️ Invoice payment failed — ${amt} (${p.invoiceId})`,
+    text: `âš ï¸ Invoice payment failed â€” ${amt} (${p.invoiceId})`,
     blocks: [
-      { type: "header", text: { type: "plain_text", text: "⚠️ Invoice Payment Failed" } },
+      { type: "header", text: { type: "plain_text", text: "âš ï¸ Invoice Payment Failed" } },
       {
         type: "section",
         fields: [
           { type: "mrkdwn", text: `*Invoice:*\n${p.invoiceId}` },
-          { type: "mrkdwn", text: `*Customer:*\n${p.customer ?? "—"}` },
+          { type: "mrkdwn", text: `*Customer:*\n${p.customer ?? "â€”"}` },
           { type: "mrkdwn", text: `*Amount Due:*\n${amt}` },
         ],
       },
@@ -127,22 +127,22 @@ export function slackInvoiceFailed(p: {
   };
 }
 
-/** 🔄 Subscription changed */
+/** ðŸ”„ Subscription changed */
 export function slackSubscriptionChanged(p: {
   subId: string;
   status: string;
   customer?: string | null;
 }): SlackPayload {
   return {
-    text: `🔄 Subscription ${p.subId} — ${p.status}`,
+    text: `ðŸ”„ Subscription ${p.subId} â€” ${p.status}`,
     blocks: [
-      { type: "header", text: { type: "plain_text", text: "🔄 Subscription Changed" } },
+      { type: "header", text: { type: "plain_text", text: "ðŸ”„ Subscription Changed" } },
       {
         type: "section",
         fields: [
           { type: "mrkdwn", text: `*ID:*\n${p.subId}` },
           { type: "mrkdwn", text: `*Status:*\n${p.status}` },
-          { type: "mrkdwn", text: `*Customer:*\n${p.customer ?? "—"}` },
+          { type: "mrkdwn", text: `*Customer:*\n${p.customer ?? "â€”"}` },
         ],
       },
     ],

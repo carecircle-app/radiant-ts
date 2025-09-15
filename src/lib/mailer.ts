@@ -66,7 +66,7 @@ export type SendOpts = {
 export async function sendEmail(opts: SendOpts) {
   const tx = getTransporter();
   if (!tx) {
-    console.warn("[email] Skipped send — missing transporter (no creds or nodemailer not installed).", {
+    console.warn("[email] Skipped send â€” missing transporter (no creds or nodemailer not installed).", {
       missingCreds: {
         SMTP_HOST: !!SMTP_HOST,
         SMTP_PORT: !!SMTP_PORT,
@@ -81,7 +81,7 @@ export async function sendEmail(opts: SendOpts) {
 
   const to = opts.to || MAIL_TO || SMTP_USER;
   if (!to) {
-    console.warn("[email] Skipped send — no recipient (set MAIL_TO or provide opts.to).");
+    console.warn("[email] Skipped send â€” no recipient (set MAIL_TO or provide opts.to).");
     return { ok: false, skipped: true as const };
   }
 
@@ -129,21 +129,21 @@ export function tmplPaymentSucceeded(p: {
   email?: string | null; // if present, we'll prefill "to"
 }) {
   const amount = fmtAmount(p.amount, p.currency);
-  const subject = `✅ Payment succeeded — ${amount}`;
+  const subject = `âœ… Payment succeeded â€” ${amount}`;
   const html = `
     <div style="font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
       <h2>Payment succeeded</h2>
       <p><b>Amount:</b> ${amount}</p>
       <p><b>Payment Intent:</b> ${p.piId}</p>
-      <p><b>Customer:</b> ${p.customer ?? "—"}</p>
-      <p><b>Email:</b> ${p.email ?? "—"}</p>
+      <p><b>Customer:</b> ${p.customer ?? "â€”"}</p>
+      <p><b>Email:</b> ${p.email ?? "â€”"}</p>
     </div>
   `;
   const text = `Payment succeeded
 Amount: ${amount}
 Payment Intent: ${p.piId}
-Customer: ${p.customer ?? "—"}
-Email: ${p.email ?? "—"}`;
+Customer: ${p.customer ?? "â€”"}
+Email: ${p.email ?? "â€”"}`;
   return { to: p.email ?? undefined, subject, html, text };
 }
 
@@ -156,14 +156,14 @@ export function tmplInvoiceFailed(p: {
   hostedInvoiceUrl?: string | null;
 }) {
   const amount =
-    p.amountDue != null && p.currency ? fmtAmount(p.amountDue, p.currency) : "—";
-  const subject = `⚠️ Invoice payment failed — ${amount} (${p.invoiceId})`;
+    p.amountDue != null && p.currency ? fmtAmount(p.amountDue, p.currency) : "â€”";
+  const subject = `âš ï¸ Invoice payment failed â€” ${amount} (${p.invoiceId})`;
   const link = p.hostedInvoiceUrl ? `\nInvoice: ${p.hostedInvoiceUrl}` : "";
   const html = `
     <div style="font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
       <h2>Invoice payment failed</h2>
       <p><b>Invoice:</b> ${p.invoiceId}</p>
-      <p><b>Customer:</b> ${p.customer ?? "—"}</p>
+      <p><b>Customer:</b> ${p.customer ?? "â€”"}</p>
       <p><b>Amount due:</b> ${amount}</p>
       ${p.hostedInvoiceUrl ? `<p><a href="${p.hostedInvoiceUrl}">Open invoice in Stripe</a></p>` : ""}
       <p>Please follow up to update the payment method.</p>
@@ -171,7 +171,7 @@ export function tmplInvoiceFailed(p: {
   `;
   const text = `Invoice payment failed
 Invoice: ${p.invoiceId}
-Customer: ${p.customer ?? "—"}
+Customer: ${p.customer ?? "â€”"}
 Amount due: ${amount}${link}
 Please follow up to update the payment method.`;
   // No "to" set -> falls back to MAIL_TO/SMTP_USER (admin mailbox)
@@ -184,19 +184,19 @@ export function tmplSubscriptionChanged(p: {
   status: string;
   customer?: string | null;
 }) {
-  const subject = `🔄 Subscription ${p.subId} — ${p.status}`;
+  const subject = `ðŸ”„ Subscription ${p.subId} â€” ${p.status}`;
   const html = `
     <div style="font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
       <h2>Subscription changed</h2>
       <p><b>ID:</b> ${p.subId}</p>
       <p><b>Status:</b> ${p.status}</p>
-      <p><b>Customer:</b> ${p.customer ?? "—"}</p>
+      <p><b>Customer:</b> ${p.customer ?? "â€”"}</p>
     </div>
   `;
   const text = `Subscription changed
 ID: ${p.subId}
 Status: ${p.status}
-Customer: ${p.customer ?? "—"}`;
+Customer: ${p.customer ?? "â€”"}`;
   // No "to" set -> falls back to MAIL_TO/SMTP_USER (admin mailbox)
   return { subject, html, text };
 }

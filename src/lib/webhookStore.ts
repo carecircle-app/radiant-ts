@@ -6,6 +6,8 @@
 import { prisma } from "@/lib/db";
 // import { prisma } from "./db";
 
+import type { Prisma } from "@prisma/client";
+
 /* =========================
    Input types (match schema)
    ========================= */
@@ -96,13 +98,7 @@ export async function upsertCustomer(input: UpsertCustomerInput) {
 export async function upsertSubscription(input: UpsertSubscriptionInput) {
   if (!input.customerId) return; // cannot proceed without a customer
 
-  await prisma.$transaction(async (tx) => {
-    // minimal stub so the FK can connect if customer isn't upserted yet
-    await tx.customer.upsert({
-      where: { id: input.customerId! },
-      create: { id: input.customerId! },
-      update: {},
-    });
+  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
 
     await tx.subscription.upsert({
       where: { id: input.id },

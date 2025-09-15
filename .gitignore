@@ -38,3 +38,6 @@ tsconfig.tsbuildinfo
 .env*.local
 
 .vercel
+
+.vercel
+.env*.local

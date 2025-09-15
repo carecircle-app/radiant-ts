@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "pwa-msedge",
+      "request": "launch",
+      "name": "Open CareCircle at 375px",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "runtimeArgs": [
+        "--window-size=375,812",       // Phone viewport size
+        "--auto-open-devtools-for-tabs"
+      ]
+    }
+  ]
+}

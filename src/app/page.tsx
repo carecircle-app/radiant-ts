@@ -15,14 +15,6 @@ function LogoCareCircle({ className = "h-14 w-14" }: { className?: string }) {
     </svg>
   );
 }
-export default function Home() {
-  return (
-    <>
-      {/* header + hero + FeatureBoxes + footer, all your JSX */}
-      <FeatureBoxes />
-    </>
-  );
-}
 
 const env = {
   lite: process.env.NEXT_PUBLIC_STRIPE_PRICE_LITE || "",

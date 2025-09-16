@@ -137,7 +137,7 @@ const ACTIONS: ReadonlyArray<{ v: ActionV; label: string }> = [
 ];
 
 /* ============================ Component ============================ */
-export default function AdminPage(): JSX.Element {
+export default function AdminPage() {
   /* -------- Acting User (header auth) -------- */
   const [acting, setActing] = useState<string>('u-owner');
   const headers = useMemo(() => ({ 'x-user-id': acting }), [acting]);

@@ -1,48 +1,56 @@
-﻿import { NextResponse } from "next/server";
+﻿// src/app/api/stripe/checkout/route.ts
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import Stripe from "stripe";
+import { NextResponse } from "next/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", { apiVersion: "2023-10-16" });
-const ORIGIN = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
-function getPriceIdFrom(req: Request) {
-  const { searchParams } = new URL(req.url);
-  return searchParams.get("priceId") ?? searchParams.get("price") ?? undefined;
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+if (!STRIPE_SECRET_KEY) {
+  console.warn("[stripe] STRIPE_SECRET_KEY is missing");
 }
+const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY, { apiVersion: "2024-06-20" }) : null;
 
-// Redirect helper
-async function makeSessionAndRedirect(priceId: string) {
-  const session = await stripe.checkout.sessions.create({
-    mode: "subscription",
-    line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${ORIGIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${ORIGIN}/pricing`,
-    allow_promotion_codes: true,
-    billing_address_collection: "auto",
-  });
-  return NextResponse.redirect(session.url!, { status: 303 });
+// Build an absolute site URL that works on Vercel previews & prod
+function siteBase(req: Request) {
+  // 1) Explicit override (recommended for prod custom domain)
+  const envBase = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
+  if (envBase) return envBase;
+
+  // 2) Vercel preview/prod (e.g. my-app-git-...-username.vercel.app)
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+
+  // 3) Fallback to request origin (works locally)
+  const u = new URL(req.url);
+  return `${u.protocol}//${u.host}`;
 }
 
 export async function GET(req: Request) {
-  const priceId = getPriceIdFrom(req);
-  if (!priceId) {
-    return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
-  }
   try {
-    return await makeSessionAndRedirect(priceId);
-  } catch (err: any) {
-    return NextResponse.json({ error: err?.message ?? "stripe_error" }, { status: 500 });
-  }
-}
+    const { searchParams } = new URL(req.url);
+    const priceId = searchParams.get("priceId");
+    const mode = (searchParams.get("mode") || "subscription") as "subscription" | "payment";
 
-// Keep POST support too, but simply reuse the same logic
-export async function POST(req: Request) {
-  const priceId = getPriceIdFrom(req);
-  if (!priceId) {
-    return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
-  }
-  try {
-    return await makeSessionAndRedirect(priceId);
+    if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
+    if (!stripe)  return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });
+
+    // Validate price exists to catch typos early
+    await stripe.prices.retrieve(priceId);
+
+    const BASE = siteBase(req);
+    const success_url = `${BASE}/success?session_id={CHECKOUT_SESSION_ID}`;
+    const cancel_url  = `${BASE}/#pricing`;
+
+    const session = await stripe.checkout.sessions.create({
+      mode,
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url,
+      cancel_url,
+    });
+
+    return NextResponse.redirect(session.url!, 303);
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message ?? "stripe_error" }, { status: 500 });
+    console.error("[stripe checkout]", err?.message || err);
+    return NextResponse.json({ error: err?.message ?? "checkout error" }, { status: 500 });
   }
 }

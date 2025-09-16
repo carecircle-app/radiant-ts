@@ -1,6 +1,6 @@
-import { PlusGrid, PlusGridItem, PlusGridRow } from '@/components/plus-grid'
+﻿import { PlusGrid, PlusGridItem, PlusGridRow } from '@/components/plus-grid'
 import { Button } from './button'
-import { Container } from "@/components/container";
+import Container from "@/components/container";
 import { Gradient } from './gradient'
 import { Link } from './link'
 import { Logo } from './logo'
@@ -191,3 +191,4 @@ export function Footer() {
     </footer>
   )
 }
+

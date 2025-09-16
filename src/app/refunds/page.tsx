@@ -1,5 +1,5 @@
 ﻿import Link from "next/link";
-import { Container } from "@/components/container";
+import Container from "@/components/container";
 
 export const metadata = {
   title: "Refund Policy  CareCircle",
@@ -21,3 +21,4 @@ export default function Page() {
     </Container>
   );
 }
+
